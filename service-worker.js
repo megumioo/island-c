@@ -1,5 +1,4 @@
-const CACHE_NAME = 'island-v2';
-const CACHE_NAME = 'island-v3';
+const CACHE_NAME = 'island-v4';
 const urlsToCache = [
   './',
   './index.html',
@@ -8,7 +7,7 @@ const urlsToCache = [
   './manifest.json',
   './service-worker.js',
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css'
-  // 暂时移除图标缓存，等图标准备好再加
+  // 暂时不缓存图标，等图标准备好
 ];
 
 self.addEventListener('install', event => {
@@ -75,14 +74,4 @@ self.addEventListener('fetch', event => {
         });
       })
   );
-});
-
-// 处理后台同步
-self.addEventListener('sync', event => {
-  if (event.tag === 'sync-data') {
-    event.waitUntil(
-      // 这里可以实现后台数据同步逻辑
-      console.log('Background sync triggered')
-    );
-  }
 });
