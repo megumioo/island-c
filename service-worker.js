@@ -1,4 +1,5 @@
 const CACHE_NAME = 'island-v2';
+const CACHE_NAME = 'island-v3';
 const urlsToCache = [
   './',
   './index.html',
@@ -6,10 +7,8 @@ const urlsToCache = [
   './app.js',
   './manifest.json',
   './service-worker.js',
-  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
-  './icons/icon-152x152.png',
-  './icons/icon-180x180.png',
-  './icons/icon-144x144.png'
+  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css'
+  // 暂时移除图标缓存，等图标准备好再加
 ];
 
 self.addEventListener('install', event => {
