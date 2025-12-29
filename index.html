@@ -1194,8 +1194,37 @@
 <!-- ==================== 引入外部JavaScript文件 ==================== -->
 <script src="./app.js"></script>
 <!-- ==================== 新增结束 ==================== -->
+<script>
+// 简单测试 - 如果这个运行了，说明JS能执行
+console.log("页面JS测试开始");
 
+// 测试1：检查基本JS是否工作
+document.addEventListener('DOMContentLoaded', function() {
+    console.log("DOM已加载");
+    
+    // 测试2：尝试更新时间显示
+    const timeElement = document.getElementById('currentDateTime');
+    if (timeElement) {
+        timeElement.textContent = new Date().toLocaleString('zh-CN');
+        console.log("时间已更新");
+    } else {
+        console.log("找不到时间元素");
+    }
+    
+    // 测试3：给按钮添加简单点击事件
+    const navButton = document.getElementById('navToggle');
+    if (navButton) {
+        navButton.addEventListener('click', function() {
+            console.log("导航按钮被点击了");
+            alert("按钮点击测试成功！");
+        });
+    }
+});
+
+console.log("页面JS测试代码已添加");
+</script>
 </body> 
 
 </html>
+
 
