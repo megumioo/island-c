@@ -546,8 +546,7 @@ document.addEventListener('DOMContentLoaded', function() {
     updateReviewData(); 
     loadIslandInteractions(); 
     loadImportantDates(); 
-    updateOverviewFromTemp(); 
-    document.getElementById('financeDate').value = todayStr; 
+    updateOverviewFromTemp();  
     document.getElementById('importantDate').value = todayStr; 
     loadWorkData(); 
 // ========== 新增：初始化财务数据 ==========
@@ -1869,8 +1868,8 @@ function updateOverview() {
     document.getElementById('expenseOverview').textContent = `${todayExpense.toFixed(2)}元`; 
 } 
 // ==================== 财务记账多条目功能 ====================
-
 function addFinanceItem(type) {
+    const dateStr = formatDate(new Date()); // 获取当前日期
     const containerId = type === 'income' ? 'incomeItems' : 'expenseItems';
     const container = document.getElementById(containerId);
     const count = type === 'income' ? ++incomeItemCount : ++expenseItemCount;
@@ -1907,7 +1906,7 @@ function addFinanceItem(type) {
                 </div>
             </div>
             <input type="text" class="finance-description" placeholder="${type === 'income' ? '收入' : '支出'}描述...">
-            <input type="date" class="finance-date" value="${formatDate(new Date())}">
+            <input type="date" class="finance-date" value="${dateStr}">
             <div class="finance-item-actions">
                 <button class="delete-finance-item" onclick="deleteFinanceItem(this, '${type}')" title="删除此项">
                     <i class="fas fa-trash"></i>
