@@ -185,9 +185,15 @@
                 window.close();
             } else {
                 // 重定向回主应用
-                const basePath = window.location.pathname.includes('/island-c/') ? 
-                    '/island-c/' : './';
-                window.location.href = basePath + 'index.html';
+                // 获取当前页面的目录路径
+                const currentPath = window.location.pathname;
+                const directory = currentPath.substring(0, currentPath.lastIndexOf('/') + 1);
+                
+                // 构建 index.html 的完整路径
+                const indexPath = directory + 'index.html';
+                
+                console.log('导航到:', indexPath);
+                window.location.href = indexPath;
             }
         }
         
@@ -228,13 +234,19 @@
                 }, 1500);
                 
             } else {
-                // 直接访问的情况，存储到 localStorage 并重定向
+                // 直接访问的情况,存储到 localStorage 并重定向
                 localStorage.setItem('github_pat_temp', pat);
                 
                 // 重定向回主应用
-                const basePath = window.location.pathname.includes('/island-c/') ? 
-                    '/island-c/' : './';
-                window.location.href = basePath + 'index.html#github-sync';
+                // 获取当前页面的目录路径
+                const currentPath = window.location.pathname;
+                const directory = currentPath.substring(0, currentPath.lastIndexOf('/') + 1);
+                
+                // 构建 index.html 的完整路径
+                const indexPath = directory + 'index.html#github-sync';
+                
+                console.log('导航到:', indexPath);
+                window.location.href = indexPath;
             }
         }
         
