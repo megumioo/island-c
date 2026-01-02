@@ -22,6 +22,7 @@ class LifeManagerApp {
         this.loadImportantDates();
         this.renderAcNpcs();
         this.updateChoresScore();
+        this.refreshAnalytics();
     }
     
     setupEventListeners() {
@@ -75,13 +76,20 @@ class LifeManagerApp {
         // 删除行
         document.addEventListener('click', (e) => {
             if (e.target.classList.contains('remove-row-btn') || 
-                e.target.parentElement.classList.contains('remove-row-btn')) {
-                const btn = e.target.classList.contains('remove-row-btn') ? e.target : e.target.parentElement;
-                const row = btn.closest('.work-row, .study-row, .exercise-row, .entertainment-row, .finance-row');
-                if (row) {
+                e.target.closest('.remove-row-btn')) {
+                const btn = e.target.classList.contains('remove-row-btn') ? e.target : e.target.closest('.remove-row-btn');
+                const row = btn.closest('.form-row');
+                if (row && row.parentElement.classList.contains('work-entries')) {
+                    if (document.querySelectorAll('.work-entries .form-row').length > 1) {
+                        row.remove();
+                    }
+                } else if (row) {
                     row.remove();
-                    if (row.parentElement.children.length === 0) {
-                        this.addDefaultRow(row.parentElement.parentElement.dataset.module);
+                    // 检查是否需要添加默认行
+                    const container = row.parentElement;
+                    if (container.children.length === 0) {
+                        const moduleType = container.closest('.module-card').dataset.module;
+                        this.addDefaultRow(moduleType);
                     }
                 }
             }
@@ -136,6 +144,12 @@ class LifeManagerApp {
                 this.showDateDetails(this.selectedDate);
             }
         });
+        
+        // 初始加载后，如果有work-entries是空的，添加一行
+        const workEntries = document.querySelector('.work-entries');
+        if (workEntries && workEntries.children.length === 0) {
+            this.addWorkRow();
+        }
     }
     
     switchSection(sectionId) {
@@ -199,7 +213,7 @@ class LifeManagerApp {
                 
             case 'work':
                 const workEntries = [];
-                card.querySelectorAll('.work-row').forEach(row => {
+                card.querySelectorAll('.work-entries .form-row').forEach(row => {
                     workEntries.push({
                         todo: row.querySelector('.work-todo').value,
                         done: row.querySelector('.work-done').value
@@ -218,7 +232,7 @@ class LifeManagerApp {
                 
             case 'study':
                 const studyEntries = [];
-                card.querySelectorAll('.study-row').forEach(row => {
+                card.querySelectorAll('.study-entries .form-row').forEach(row => {
                     studyEntries.push({
                         subject: row.querySelector('.study-subject').value,
                         duration: row.querySelector('.study-duration').value,
@@ -253,7 +267,7 @@ class LifeManagerApp {
                 
             case 'exercise':
                 const exerciseEntries = [];
-                card.querySelectorAll('.exercise-row').forEach(row => {
+                card.querySelectorAll('.exercise-entries .form-row').forEach(row => {
                     exerciseEntries.push({
                         type: row.querySelector('.exercise-type').value,
                         duration: row.querySelector('.exercise-duration').value,
@@ -274,7 +288,7 @@ class LifeManagerApp {
                 
             case 'entertainment':
                 const entertainmentEntries = [];
-                card.querySelectorAll('.entertainment-row').forEach(row => {
+                card.querySelectorAll('.entertainment-entries .form-row').forEach(row => {
                     entertainmentEntries.push({
                         type: row.querySelector('.entertainment-type').value,
                         duration: row.querySelector('.entertainment-duration').value,
@@ -288,7 +302,7 @@ class LifeManagerApp {
                 const incomeEntries = [];
                 const expenseEntries = [];
                 
-                card.querySelectorAll('.income-entries .finance-row').forEach(row => {
+                card.querySelectorAll('.income-entries .form-row').forEach(row => {
                     incomeEntries.push({
                         category: row.querySelector('.income-category').value,
                         amount: row.querySelector('.income-amount').value,
@@ -296,7 +310,7 @@ class LifeManagerApp {
                     });
                 });
                 
-                card.querySelectorAll('.expense-entries .finance-row').forEach(row => {
+                card.querySelectorAll('.expense-entries .form-row').forEach(row => {
                     expenseEntries.push({
                         category: row.querySelector('.expense-category').value,
                         amount: row.querySelector('.expense-amount').value,
@@ -319,7 +333,13 @@ class LifeManagerApp {
             const storageKey = `${moduleName}_TEMP_${dateKey}`;
             const data = localStorage.getItem(storageKey);
             
-            if (!data) return;
+            if (!data) {
+                // 如果没有数据，为需要多行输入的模块添加默认行
+                if (moduleName === 'work' && !card.querySelector('.work-entries .form-row')) {
+                    this.addWorkRow();
+                }
+                return;
+            }
             
             const parsedData = JSON.parse(data);
             
@@ -338,10 +358,12 @@ class LifeManagerApp {
                 case 'work':
                     const workContainer = card.querySelector('.work-entries');
                     workContainer.innerHTML = '';
-                    if (Array.isArray(parsedData)) {
+                    if (Array.isArray(parsedData) && parsedData.length > 0) {
                         parsedData.forEach(entry => {
                             this.addWorkRow(entry.todo, entry.done);
                         });
+                    } else {
+                        this.addWorkRow();
                     }
                     break;
                     
@@ -357,10 +379,12 @@ class LifeManagerApp {
                 case 'study':
                     const studyContainer = card.querySelector('.study-entries');
                     studyContainer.innerHTML = '';
-                    if (Array.isArray(parsedData)) {
+                    if (Array.isArray(parsedData) && parsedData.length > 0) {
                         parsedData.forEach(entry => {
                             this.addStudyRow(entry.subject, entry.duration, entry.content, entry.summary);
                         });
+                    } else {
+                        this.addStudyRow();
                     }
                     break;
                     
@@ -383,10 +407,12 @@ class LifeManagerApp {
                 case 'exercise':
                     const exerciseContainer = card.querySelector('.exercise-entries');
                     exerciseContainer.innerHTML = '';
-                    if (Array.isArray(parsedData)) {
+                    if (Array.isArray(parsedData) && parsedData.length > 0) {
                         parsedData.forEach(entry => {
                             this.addExerciseRow(entry.type, entry.duration, entry.calories, entry.feeling);
                         });
+                    } else {
+                        this.addExerciseRow();
                     }
                     break;
                     
@@ -399,10 +425,12 @@ class LifeManagerApp {
                 case 'entertainment':
                     const entertainmentContainer = card.querySelector('.entertainment-entries');
                     entertainmentContainer.innerHTML = '';
-                    if (Array.isArray(parsedData)) {
+                    if (Array.isArray(parsedData) && parsedData.length > 0) {
                         parsedData.forEach(entry => {
                             this.addEntertainmentRow(entry.type, entry.duration, entry.feeling);
                         });
+                    } else {
+                        this.addEntertainmentRow();
                     }
                     break;
                     
@@ -410,17 +438,25 @@ class LifeManagerApp {
                     if (parsedData.income && Array.isArray(parsedData.income)) {
                         const incomeContainer = card.querySelector('.income-entries');
                         incomeContainer.innerHTML = '';
-                        parsedData.income.forEach(entry => {
-                            this.addIncomeRow(entry.category, entry.amount, entry.description);
-                        });
+                        if (parsedData.income.length > 0) {
+                            parsedData.income.forEach(entry => {
+                                this.addIncomeRow(entry.category, entry.amount, entry.description);
+                            });
+                        } else {
+                            this.addIncomeRow();
+                        }
                     }
                     
                     if (parsedData.expense && Array.isArray(parsedData.expense)) {
                         const expenseContainer = card.querySelector('.expense-entries');
                         expenseContainer.innerHTML = '';
-                        parsedData.expense.forEach(entry => {
-                            this.addExpenseRow(entry.category, entry.amount, entry.description);
-                        });
+                        if (parsedData.expense.length > 0) {
+                            parsedData.expense.forEach(entry => {
+                                this.addExpenseRow(entry.category, entry.amount, entry.description);
+                            });
+                        } else {
+                            this.addExpenseRow();
+                        }
                     }
                     break;
             }
@@ -430,27 +466,32 @@ class LifeManagerApp {
     addWorkRow(todo = '', done = '') {
         const container = document.querySelector('.work-entries');
         const row = document.createElement('div');
-        row.className = 'work-row';
+        row.className = 'form-row align-center';
         row.innerHTML = `
-            <div class="form-group">
-                <input type="text" class="work-todo" placeholder="待办事项" value="${todo}">
+            <div class="form-group flex-1">
+                <input type="text" class="form-control work-todo" placeholder="待办事项" value="${todo}">
             </div>
-            <div class="form-group">
-                <input type="text" class="work-done" placeholder="完成情况" value="${done}">
+            <div class="form-group flex-1">
+                <input type="text" class="form-control work-done" placeholder="完成情况" value="${done}">
             </div>
-            <button type="button" class="remove-row-btn"><i class="fas fa-times"></i></button>
+            <button type="button" class="btn btn-remove remove-row-btn"><i class="fas fa-times"></i></button>
         `;
         container.appendChild(row);
     }
     
     addStudyRow(subject = '逻辑', duration = '', content = '', summary = '') {
         const container = document.querySelector('.study-entries');
-        const row = document.createElement('div');
-        row.className = 'study-row';
-        row.innerHTML = `
-            <div class="form-group">
+        
+        // 创建行容器
+        const rowContainer = document.createElement('div');
+        
+        // 创建第一行（科目、时长、删除按钮）
+        const firstRow = document.createElement('div');
+        firstRow.className = 'form-row align-center';
+        firstRow.innerHTML = `
+            <div class="form-group flex-1">
                 <label>科目:</label>
-                <select class="study-subject">
+                <select class="form-control study-subject">
                     <option value="逻辑" ${subject === '逻辑' ? 'selected' : ''}>逻辑</option>
                     <option value="数学" ${subject === '数学' ? 'selected' : ''}>数学</option>
                     <option value="英语" ${subject === '英语' ? 'selected' : ''}>英语</option>
@@ -458,31 +499,49 @@ class LifeManagerApp {
                     <option value="其他" ${subject === '其他' ? 'selected' : ''}>其他</option>
                 </select>
             </div>
-            <div class="form-group">
+            <div class="form-group flex-1">
                 <label>时长 (小时):</label>
-                <input type="number" step="0.1" min="0" class="study-duration" placeholder="例如: 2" value="${duration}">
+                <input type="number" step="0.1" min="0" class="form-control study-duration" placeholder="例如: 2" value="${duration}">
             </div>
-            <div class="form-group full-width">
-                <label>学习内容:</label>
-                <textarea class="study-content" rows="2" placeholder="学习了什么？">${content}</textarea>
-            </div>
-            <div class="form-group full-width">
-                <label>学习总结:</label>
-                <textarea class="study-summary" rows="2" placeholder="有什么收获？">${summary}</textarea>
-            </div>
-            <button type="button" class="remove-row-btn"><i class="fas fa-times"></i></button>
+            <button type="button" class="btn btn-remove remove-row-btn"><i class="fas fa-times"></i></button>
         `;
-        container.appendChild(row);
+        
+        // 创建内容文本框
+        const contentDiv = document.createElement('div');
+        contentDiv.className = 'form-group';
+        contentDiv.innerHTML = `
+            <label>学习内容:</label>
+            <textarea class="form-control study-content" rows="2" placeholder="学习了什么？">${content}</textarea>
+        `;
+        
+        // 创建总结文本框
+        const summaryDiv = document.createElement('div');
+        summaryDiv.className = 'form-group';
+        summaryDiv.innerHTML = `
+            <label>学习总结:</label>
+            <textarea class="form-control study-summary" rows="2" placeholder="有什么收获？">${summary}</textarea>
+        `;
+        
+        // 组装
+        rowContainer.appendChild(firstRow);
+        rowContainer.appendChild(contentDiv);
+        rowContainer.appendChild(summaryDiv);
+        container.appendChild(rowContainer);
     }
     
     addExerciseRow(type = '有氧', duration = '', calories = '', feeling = '') {
         const container = document.querySelector('.exercise-entries');
-        const row = document.createElement('div');
-        row.className = 'exercise-row';
-        row.innerHTML = `
-            <div class="form-group">
+        
+        // 创建行容器
+        const rowContainer = document.createElement('div');
+        
+        // 创建第一行（类型、时长、热量、删除按钮）
+        const firstRow = document.createElement('div');
+        firstRow.className = 'form-row align-center';
+        firstRow.innerHTML = `
+            <div class="form-group flex-1">
                 <label>运动类型:</label>
-                <select class="exercise-type">
+                <select class="form-control exercise-type">
                     <option value="有氧" ${type === '有氧' ? 'selected' : ''}>有氧</option>
                     <option value="无氧" ${type === '无氧' ? 'selected' : ''}>无氧</option>
                     <option value="力量" ${type === '力量' ? 'selected' : ''}>力量</option>
@@ -490,31 +549,44 @@ class LifeManagerApp {
                     <option value="舞力全开" ${type === '舞力全开' ? 'selected' : ''}>舞力全开</option>
                 </select>
             </div>
-            <div class="form-group">
+            <div class="form-group flex-1">
                 <label>时长 (小时):</label>
-                <input type="number" step="0.1" min="0" class="exercise-duration" placeholder="例如: 1" value="${duration}">
+                <input type="number" step="0.1" min="0" class="form-control exercise-duration" placeholder="例如: 1" value="${duration}">
             </div>
-            <div class="form-group">
+            <div class="form-group flex-1">
                 <label>消耗热量 (千卡):</label>
-                <input type="number" min="0" class="exercise-calories" placeholder="例如: 300" value="${calories}">
+                <input type="number" min="0" class="form-control exercise-calories" placeholder="例如: 300" value="${calories}">
             </div>
-            <div class="form-group full-width">
-                <label>运动感受:</label>
-                <textarea class="exercise-feeling" rows="2" placeholder="感觉如何？">${feeling}</textarea>
-            </div>
-            <button type="button" class="remove-row-btn"><i class="fas fa-times"></i></button>
+            <button type="button" class="btn btn-remove remove-row-btn"><i class="fas fa-times"></i></button>
         `;
-        container.appendChild(row);
+        
+        // 创建感受文本框
+        const feelingDiv = document.createElement('div');
+        feelingDiv.className = 'form-group';
+        feelingDiv.innerHTML = `
+            <label>运动感受:</label>
+            <textarea class="form-control exercise-feeling" rows="2" placeholder="感觉如何？">${feeling}</textarea>
+        `;
+        
+        // 组装
+        rowContainer.appendChild(firstRow);
+        rowContainer.appendChild(feelingDiv);
+        container.appendChild(rowContainer);
     }
     
     addEntertainmentRow(type = '动画', duration = '', feeling = '') {
         const container = document.querySelector('.entertainment-entries');
-        const row = document.createElement('div');
-        row.className = 'entertainment-row';
-        row.innerHTML = `
-            <div class="form-group">
+        
+        // 创建行容器
+        const rowContainer = document.createElement('div');
+        
+        // 创建第一行（类型、时长、删除按钮）
+        const firstRow = document.createElement('div');
+        firstRow.className = 'form-row align-center';
+        firstRow.innerHTML = `
+            <div class="form-group flex-1">
                 <label>娱乐类型:</label>
-                <select class="entertainment-type">
+                <select class="form-control entertainment-type">
                     <option value="动画" ${type === '动画' ? 'selected' : ''}>动画</option>
                     <option value="电影" ${type === '电影' ? 'selected' : ''}>电影</option>
                     <option value="拼豆" ${type === '拼豆' ? 'selected' : ''}>拼豆</option>
@@ -522,42 +594,50 @@ class LifeManagerApp {
                     <option value="其他" ${type === '其他' ? 'selected' : ''}>其他</option>
                 </select>
             </div>
-            <div class="form-group">
+            <div class="form-group flex-1">
                 <label>时长 (小时):</label>
-                <input type="number" step="0.1" min="0" class="entertainment-duration" placeholder="例如: 1.5" value="${duration}">
+                <input type="number" step="0.1" min="0" class="form-control entertainment-duration" placeholder="例如: 1.5" value="${duration}">
             </div>
-            <div class="form-group full-width">
-                <label>娱乐感受:</label>
-                <textarea class="entertainment-feeling" rows="2" placeholder="感觉如何？">${feeling}</textarea>
-            </div>
-            <button type="button" class="remove-row-btn"><i class="fas fa-times"></i></button>
+            <button type="button" class="btn btn-remove remove-row-btn"><i class="fas fa-times"></i></button>
         `;
-        container.appendChild(row);
+        
+        // 创建感受文本框
+        const feelingDiv = document.createElement('div');
+        feelingDiv.className = 'form-group';
+        feelingDiv.innerHTML = `
+            <label>娱乐感受:</label>
+            <textarea class="form-control entertainment-feeling" rows="2" placeholder="感觉如何？">${feeling}</textarea>
+        `;
+        
+        // 组装
+        rowContainer.appendChild(firstRow);
+        rowContainer.appendChild(feelingDiv);
+        container.appendChild(rowContainer);
     }
     
     addIncomeRow(category = '工资', amount = '', description = '') {
         const container = document.querySelector('.income-entries');
         const row = document.createElement('div');
-        row.className = 'finance-row';
+        row.className = 'form-row align-center';
         row.innerHTML = `
-            <div class="form-group">
+            <div class="form-group flex-1">
                 <label>分类:</label>
-                <select class="income-category">
+                <select class="form-control income-category">
                     <option value="工资" ${category === '工资' ? 'selected' : ''}>工资</option>
                     <option value="兼职" ${category === '兼职' ? 'selected' : ''}>兼职</option>
                     <option value="礼物" ${category === '礼物' ? 'selected' : ''}>礼物</option>
                     <option value="其他" ${category === '其他' ? 'selected' : ''}>其他</option>
                 </select>
             </div>
-            <div class="form-group">
+            <div class="form-group flex-1">
                 <label>金额:</label>
-                <input type="number" min="0" class="income-amount" placeholder="金额" value="${amount}">
+                <input type="number" min="0" class="form-control income-amount" placeholder="金额" value="${amount}">
             </div>
-            <div class="form-group full-width">
+            <div class="form-group flex-2">
                 <label>描述:</label>
-                <input type="text" class="income-description" placeholder="收入描述" value="${description}">
+                <input type="text" class="form-control income-description" placeholder="收入描述" value="${description}">
             </div>
-            <button type="button" class="remove-row-btn"><i class="fas fa-times"></i></button>
+            <button type="button" class="btn btn-remove remove-row-btn"><i class="fas fa-times"></i></button>
         `;
         container.appendChild(row);
     }
@@ -565,11 +645,11 @@ class LifeManagerApp {
     addExpenseRow(category = '餐饮', amount = '', description = '') {
         const container = document.querySelector('.expense-entries');
         const row = document.createElement('div');
-        row.className = 'finance-row';
+        row.className = 'form-row align-center';
         row.innerHTML = `
-            <div class="form-group">
+            <div class="form-group flex-1">
                 <label>分类:</label>
-                <select class="expense-category">
+                <select class="form-control expense-category">
                     <option value="餐饮" ${category === '餐饮' ? 'selected' : ''}>餐饮</option>
                     <option value="购物" ${category === '购物' ? 'selected' : ''}>购物</option>
                     <option value="娱乐" ${category === '娱乐' ? 'selected' : ''}>娱乐</option>
@@ -577,15 +657,15 @@ class LifeManagerApp {
                     <option value="其他" ${category === '其他' ? 'selected' : ''}>其他</option>
                 </select>
             </div>
-            <div class="form-group">
+            <div class="form-group flex-1">
                 <label>金额:</label>
-                <input type="number" min="0" class="expense-amount" placeholder="金额" value="${amount}">
+                <input type="number" min="0" class="form-control expense-amount" placeholder="金额" value="${amount}">
             </div>
-            <div class="form-group full-width">
+            <div class="form-group flex-2">
                 <label>描述:</label>
-                <input type="text" class="expense-description" placeholder="支出描述" value="${description}">
+                <input type="text" class="form-control expense-description" placeholder="支出描述" value="${description}">
             </div>
-            <button type="button" class="remove-row-btn"><i class="fas fa-times"></i></button>
+            <button type="button" class="btn btn-remove remove-row-btn"><i class="fas fa-times"></i></button>
         `;
         container.appendChild(row);
     }
@@ -822,12 +902,29 @@ class LifeManagerApp {
                     });
                 } else if (module === 'chores') {
                     html += `<div>完成项目: ${moduleData.join(', ')}</div>`;
+                } else if (module === 'exercise') {
+                    moduleData.forEach(item => {
+                        html += `<div>${item.type}: ${item.duration}小时, ${item.calories}千卡</div>`;
+                    });
+                } else if (module === 'entertainment') {
+                    moduleData.forEach(item => {
+                        html += `<div>${item.type}: ${item.duration}小时</div>`;
+                    });
                 }
             } else if (typeof moduleData === 'object') {
                 if (module === 'sleep' || module === 'nap') {
                     html += `时长: ${moduleData.duration}小时, 质量: ${moduleData.quality}分`;
                 } else if (module === 'breakfast' || module === 'lunch' || module === 'dinner') {
                     html += moduleData.content || '';
+                } else if (module === 'game') {
+                    html += `${moduleData.name}: ${moduleData.duration}小时`;
+                } else if (module === 'finance') {
+                    if (moduleData.income && moduleData.income.length > 0) {
+                        html += `<div>收入: ${moduleData.income.length}笔</div>`;
+                    }
+                    if (moduleData.expense && moduleData.expense.length > 0) {
+                        html += `<div>支出: ${moduleData.expense.length}笔</div>`;
+                    }
                 }
             }
             
@@ -933,9 +1030,7 @@ class LifeManagerApp {
     }
     
     generateHealthStats(days) {
-        const stats = { sleepQuality: 0, sleepDays: 0, exerciseDays: 0, totalCalories: 0 };
-        const sleepData = [];
-        const exerciseData = [];
+        const stats = { sleepQuality: 0, sleepDays: 0, exerciseDays: 0, totalCalories: 0, totalExerciseHours: 0 };
         
         for (let i = 0; i < days; i++) {
             const date = new Date();
@@ -950,7 +1045,6 @@ class LifeManagerApp {
                 if (data.sleep) {
                     stats.sleepQuality += parseFloat(data.sleep.quality) || 0;
                     stats.sleepDays++;
-                    sleepData.push(parseFloat(data.sleep.quality) || 0);
                 }
                 
                 // 运动数据
@@ -958,8 +1052,8 @@ class LifeManagerApp {
                     stats.exerciseDays++;
                     data.exercise.forEach(ex => {
                         stats.totalCalories += parseFloat(ex.calories) || 0;
+                        stats.totalExerciseHours += parseFloat(ex.duration) || 0;
                     });
-                    exerciseData.push(data.exercise.length);
                 }
             }
         }
@@ -975,62 +1069,18 @@ class LifeManagerApp {
                 <div class="stat-label">运动天数</div>
             </div>
             <div class="stat-item">
+                <div class="stat-value">${stats.totalExerciseHours.toFixed(1)}</div>
+                <div class="stat-label">总运动时长(小时)</div>
+            </div>
+            <div class="stat-item">
                 <div class="stat-value">${Math.round(stats.totalCalories)}</div>
                 <div class="stat-label">总消耗热量(千卡)</div>
             </div>
         `;
-        
-        this.createSleepChart(sleepData);
-        this.createExerciseChart(exerciseData);
-    }
-    
-    createSleepChart(data) {
-        const ctx = document.getElementById('sleepChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: data.map((_, i) => `${i + 1}天前`),
-                datasets: [{
-                    label: '睡眠质量',
-                    data: data,
-                    borderColor: '#4A90E2',
-                    backgroundColor: 'rgba(74, 144, 226, 0.1)',
-                    tension: 0.3
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    title: { display: true, text: '睡眠质量趋势' }
-                }
-            }
-        });
-    }
-    
-    createExerciseChart(data) {
-        const ctx = document.getElementById('exerciseChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: data.map((_, i) => `${i + 1}天前`),
-                datasets: [{
-                    label: '运动次数',
-                    data: data,
-                    backgroundColor: '#66BB6A'
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    title: { display: true, text: '运动频率' }
-                }
-            }
-        });
     }
     
     generateStudyStats(days) {
         const stats = { totalHours: 0, subjects: {} };
-        const studyData = [];
         
         for (let i = 0; i < days; i++) {
             const date = new Date();
@@ -1042,19 +1092,31 @@ class LifeManagerApp {
                 const data = JSON.parse(archive);
                 
                 if (data.study && Array.isArray(data.study)) {
-                    let dailyHours = 0;
                     data.study.forEach(item => {
                         const hours = parseFloat(item.duration) || 0;
                         stats.totalHours += hours;
-                        dailyHours += hours;
                         
                         const subject = item.subject || '其他';
                         stats.subjects[subject] = (stats.subjects[subject] || 0) + hours;
                     });
-                    studyData.push(dailyHours);
                 }
             }
         }
+        
+        // 生成科目分布HTML
+        let subjectsHtml = '';
+        const sortedSubjects = Object.entries(stats.subjects)
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 5);
+        
+        sortedSubjects.forEach(([subject, hours]) => {
+            subjectsHtml += `
+                <div style="margin-bottom: 8px; display: flex; justify-content: space-between;">
+                    <span>${subject}</span>
+                    <span style="font-weight: bold; color: var(--primary-color);">${hours.toFixed(1)}小时</span>
+                </div>
+            `;
+        });
         
         const studyStatsContainer = document.getElementById('studyStats');
         studyStatsContainer.innerHTML = `
@@ -1066,35 +1128,17 @@ class LifeManagerApp {
                 <div class="stat-value">${(stats.totalHours / days).toFixed(1)}</div>
                 <div class="stat-label">日均学习时长</div>
             </div>
+            <div class="stat-item">
+                <div class="stat-label" style="text-align: left; margin-top: 15px; font-weight: bold;">科目分布TOP5</div>
+                <div style="margin-top: 10px; text-align: left;">
+                    ${subjectsHtml || '<p style="color: var(--light-text); font-size: 0.9rem;">暂无数据</p>'}
+                </div>
+            </div>
         `;
-        
-        this.createStudyChart(stats.subjects);
-    }
-    
-    createStudyChart(subjectData) {
-        const ctx = document.getElementById('studyChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'pie',
-            data: {
-                labels: Object.keys(subjectData),
-                datasets: [{
-                    data: Object.values(subjectData),
-                    backgroundColor: ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7']
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    title: { display: true, text: '科目分布' },
-                    legend: { position: 'bottom' }
-                }
-            }
-        });
     }
     
     generateChoresStats(days) {
         const stats = { totalScore: 0, choresCount: {} };
-        const choresData = [];
         
         for (let i = 0; i < days; i++) {
             const date = new Date();
@@ -1107,7 +1151,6 @@ class LifeManagerApp {
                 
                 if (data.chores && Array.isArray(data.chores)) {
                     stats.totalScore += data.chores.length;
-                    choresData.push(data.chores.length);
                     
                     data.chores.forEach(chore => {
                         stats.choresCount[chore] = (stats.choresCount[chore] || 0) + 1;
@@ -1115,6 +1158,21 @@ class LifeManagerApp {
                 }
             }
         }
+        
+        // 生成家务频率HTML
+        let choresHtml = '';
+        const sortedChores = Object.entries(stats.choresCount)
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 5);
+        
+        sortedChores.forEach(([chore, count]) => {
+            choresHtml += `
+                <div style="margin-bottom: 8px; display: flex; justify-content: space-between;">
+                    <span>${chore}</span>
+                    <span style="font-weight: bold; color: var(--primary-color);">${count}次</span>
+                </div>
+            `;
+        });
         
         const choresStatsContainer = document.getElementById('choresStats');
         choresStatsContainer.innerHTML = `
@@ -1126,37 +1184,17 @@ class LifeManagerApp {
                 <div class="stat-value">${(stats.totalScore / days).toFixed(1)}</div>
                 <div class="stat-label">日均家务得分</div>
             </div>
+            <div class="stat-item">
+                <div class="stat-label" style="text-align: left; margin-top: 15px; font-weight: bold;">家务频率TOP5</div>
+                <div style="margin-top: 10px; text-align: left;">
+                    ${choresHtml || '<p style="color: var(--light-text); font-size: 0.9rem;">暂无数据</p>'}
+                </div>
+            </div>
         `;
-        
-        this.createChoresChart(Object.entries(stats.choresCount));
-    }
-    
-    createChoresChart(choresData) {
-        const ctx = document.getElementById('choresChart').getContext('2d');
-        const sortedData = choresData.sort((a, b) => b[1] - a[1]).slice(0, 5);
-        
-        new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: sortedData.map(item => item[0]),
-                datasets: [{
-                    label: '完成次数',
-                    data: sortedData.map(item => item[1]),
-                    backgroundColor: '#FFA726'
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    title: { display: true, text: '家务完成频率TOP5' }
-                }
-            }
-        });
     }
     
     generateFinanceStats(days) {
         const stats = { totalIncome: 0, totalExpense: 0, incomeByCat: {}, expenseByCat: {} };
-        const financeData = [];
         
         for (let i = 0; i < days; i++) {
             const date = new Date();
@@ -1187,56 +1225,27 @@ class LifeManagerApp {
                             stats.expenseByCat[cat] = (stats.expenseByCat[cat] || 0) + amount;
                         });
                     }
-                    
-                    financeData.push({
-                        income: stats.totalIncome,
-                        expense: stats.totalExpense
-                    });
                 }
             }
         }
         
+        const balance = stats.totalIncome - stats.totalExpense;
+        
         const financeStatsContainer = document.getElementById('financeStats');
         financeStatsContainer.innerHTML = `
             <div class="stat-item">
-                <div class="stat-value">${stats.totalIncome.toFixed(2)}</div>
-                <div class="stat-label">总收入(元)</div>
+                <div class="stat-value">¥${stats.totalIncome.toFixed(2)}</div>
+                <div class="stat-label">总收入</div>
             </div>
             <div class="stat-item">
-                <div class="stat-value">${stats.totalExpense.toFixed(2)}</div>
-                <div class="stat-label">总支出(元)</div>
+                <div class="stat-value">¥${stats.totalExpense.toFixed(2)}</div>
+                <div class="stat-label">总支出</div>
             </div>
-            <div class="stat-item">
-                <div class="stat-value">${(stats.totalIncome - stats.totalExpense).toFixed(2)}</div>
-                <div class="stat-label">结余(元)</div>
+            <div class="stat-item" style="border-color: ${balance >= 0 ? 'var(--success-color)' : 'var(--danger-color)'};">
+                <div class="stat-value" style="color: ${balance >= 0 ? 'var(--success-color)' : 'var(--danger-color)'};">¥${balance.toFixed(2)}</div>
+                <div class="stat-label">结余</div>
             </div>
         `;
-        
-        this.createFinanceChart(stats.incomeByCat, stats.expenseByCat);
-    }
-    
-    createFinanceChart(incomeData, expenseData) {
-        const ctx = document.getElementById('financeChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-                labels: ['收入', '支出'],
-                datasets: [{
-                    data: [
-                        Object.values(incomeData).reduce((a, b) => a + b, 0),
-                        Object.values(expenseData).reduce((a, b) => a + b, 0)
-                    ],
-                    backgroundColor: ['#66BB6A', '#EF5350']
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    title: { display: true, text: '收支比例' },
-                    legend: { position: 'bottom' }
-                }
-            }
-        });
     }
     
     generateEntertainmentStats(days) {
@@ -1262,6 +1271,21 @@ class LifeManagerApp {
             }
         }
         
+        // 生成娱乐类型HTML
+        let entertainmentHtml = '';
+        const sortedTypes = Object.entries(stats.byType)
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 5);
+        
+        sortedTypes.forEach(([type, hours]) => {
+            entertainmentHtml += `
+                <div style="margin-bottom: 8px; display: flex; justify-content: space-between;">
+                    <span>${type}</span>
+                    <span style="font-weight: bold; color: var(--primary-color);">${hours.toFixed(1)}小时</span>
+                </div>
+            `;
+        });
+        
         const entertainmentStatsContainer = document.getElementById('entertainmentStats');
         entertainmentStatsContainer.innerHTML = `
             <div class="stat-item">
@@ -1272,29 +1296,13 @@ class LifeManagerApp {
                 <div class="stat-value">${(stats.totalHours / days).toFixed(1)}</div>
                 <div class="stat-label">日均娱乐时长</div>
             </div>
+            <div class="stat-item">
+                <div class="stat-label" style="text-align: left; margin-top: 15px; font-weight: bold;">娱乐类型TOP5</div>
+                <div style="margin-top: 10px; text-align: left;">
+                    ${entertainmentHtml || '<p style="color: var(--light-text); font-size: 0.9rem;">暂无数据</p>'}
+                </div>
+            </div>
         `;
-        
-        this.createEntertainmentChart(stats.byType);
-    }
-    
-    createEntertainmentChart(typeData) {
-        const ctx = document.getElementById('entertainmentChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'polarArea',
-            data: {
-                labels: Object.keys(typeData),
-                datasets: [{
-                    data: Object.values(typeData),
-                    backgroundColor: ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7']
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    title: { display: true, text: '娱乐类型分布' }
-                }
-            }
-        });
     }
     
     generateAcStats(days) {
@@ -1331,20 +1339,55 @@ class LifeManagerApp {
         const completionRate = totalPossible > 0 ? 
             ((stats.totalGreetings + stats.totalGifts) / totalPossible * 100).toFixed(1) : 0;
         
+        const version1 = stats.byVersion['小航小刀小岛'] || 0;
+        const version2 = stats.byVersion['刀刀航航岛岛'] || 0;
+        const totalDays = version1 + version2;
+        const version1Percent = totalDays > 0 ? ((version1 / totalDays) * 100).toFixed(1) : 0;
+        const version2Percent = totalDays > 0 ? ((version2 / totalDays) * 100).toFixed(1) : 0;
+        
         const versionStatsContainer = document.getElementById('acVersionStats');
         versionStatsContainer.innerHTML = `
             <h4>版本使用统计</h4>
-            <p>小航小刀小岛: ${stats.byVersion['小航小刀小岛'] || 0} 天</p>
-            <p>刀刀航航岛岛: ${stats.byVersion['刀刀航航岛岛'] || 0} 天</p>
+            <div style="margin-top: 15px;">
+                <div style="margin-bottom: 10px; display: flex; justify-content: space-between;">
+                    <span>小航小刀小岛:</span>
+                    <span style="font-weight: bold;">${version1} 天 (${version1Percent}%)</span>
+                </div>
+                <div style="margin-bottom: 10px; display: flex; justify-content: space-between;">
+                    <span>刀刀航航岛岛:</span>
+                    <span style="font-weight: bold;">${version2} 天 (${version2Percent}%)</span>
+                </div>
+                <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid var(--border-color);">
+                    <strong>总计:</strong> ${totalDays} 天
+                </div>
+            </div>
         `;
         
         const npcStatsContainer = document.getElementById('acNpcStats');
         npcStatsContainer.innerHTML = `
             <h4>互动统计</h4>
-            <p>打招呼次数: ${stats.totalGreetings}</p>
-            <p>送礼物次数: ${stats.totalGifts}</p>
-            <p>总互动次数: ${stats.totalGreetings + stats.totalGifts}</p>
-            <p>完成率: ${completionRate}%</p>
+            <div style="margin-top: 15px;">
+                <div style="margin-bottom: 10px; display: flex; justify-content: space-between;">
+                    <span>打招呼次数:</span>
+                    <span style="font-weight: bold; color: var(--ac-green);">${stats.totalGreetings}</span>
+                </div>
+                <div style="margin-bottom: 10px; display: flex; justify-content: space-between;">
+                    <span>送礼物次数:</span>
+                    <span style="font-weight: bold; color: var(--ac-green);">${stats.totalGifts}</span>
+                </div>
+                <div style="margin-bottom: 15px; display: flex; justify-content: space-between;">
+                    <span>总互动次数:</span>
+                    <span style="font-weight: bold; color: var(--primary-color);">${stats.totalGreetings + stats.totalGifts}</span>
+                </div>
+                <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid var(--border-color);">
+                    <div style="font-size: 1.2rem; font-weight: bold; text-align: center; color: ${completionRate >= 80 ? 'var(--success-color)' : completionRate >= 50 ? 'var(--warning-color)' : 'var(--danger-color)'};">
+                        完成率: ${completionRate}%
+                    </div>
+                    <div style="font-size: 0.9rem; color: var(--light-text); text-align: center; margin-top: 5px;">
+                        已完成 ${stats.totalGreetings + stats.totalGifts} / ${totalPossible} 次
+                    </div>
+                </div>
+            </div>
         `;
     }
     
@@ -1366,13 +1409,16 @@ class LifeManagerApp {
             if (response.ok) {
                 const user = await response.json();
                 this.showNotification(`连接成功！用户: ${user.login}`, 'success');
+                document.getElementById('syncStatus').innerHTML = `<div style="color: var(--success-color);"><i class="fas fa-check-circle"></i> 连接成功 (${user.login})</div>`;
                 return true;
             } else {
                 this.showNotification('连接失败，请检查Token是否正确', 'error');
+                document.getElementById('syncStatus').innerHTML = `<div style="color: var(--danger-color);"><i class="fas fa-times-circle"></i> 连接失败</div>`;
                 return false;
             }
         } catch (error) {
             this.showNotification(`连接错误: ${error.message}`, 'error');
+            document.getElementById('syncStatus').innerHTML = `<div style="color: var(--danger-color);"><i class="fas fa-times-circle"></i> 连接错误</div>`;
             return false;
         }
     }
@@ -1385,6 +1431,8 @@ class LifeManagerApp {
         const encryptionKey = document.getElementById('encryptionKey').value || 'xiaohang-xiaodao-xiaodao';
         
         try {
+            document.getElementById('syncStatus').innerHTML = `<div><i class="fas fa-spinner fa-spin"></i> 正在备份数据...</div>`;
+            
             // 收集所有数据
             const allData = {};
             const keys = Object.keys(localStorage);
@@ -1398,7 +1446,7 @@ class LifeManagerApp {
             
             // 准备Gist数据
             const gistData = {
-                description: `小航小刀小岛备份 ${new Date().toLocaleString()}`,
+                description: `小航小刀小岛备份 ${new Date().toLocaleString('zh-CN')}`,
                 public: false,
                 files: {
                     'life-manager-backup.json': {
@@ -1438,12 +1486,16 @@ class LifeManagerApp {
                 document.getElementById('gistId').value = result.id;
                 localStorage.setItem('lastGistId', result.id);
                 localStorage.setItem('lastBackup', new Date().toISOString());
-                document.getElementById('lastBackup').textContent = new Date().toLocaleString();
+                document.getElementById('lastBackup').textContent = new Date().toLocaleString('zh-CN');
+                document.getElementById('syncStatus').innerHTML = `<div style="color: var(--success-color);"><i class="fas fa-check-circle"></i> 数据备份成功！Gist ID: ${result.id.substring(0, 8)}...</div>`;
                 this.showNotification('数据备份成功！', 'success');
             } else {
+                const error = await response.json();
+                document.getElementById('syncStatus').innerHTML = `<div style="color: var(--danger-color);"><i class="fas fa-times-circle"></i> 备份失败: ${error.message || '未知错误'}</div>`;
                 this.showNotification('备份失败，请重试', 'error');
             }
         } catch (error) {
+            document.getElementById('syncStatus').innerHTML = `<div style="color: var(--danger-color);"><i class="fas fa-times-circle"></i> 备份错误: ${error.message}</div>`;
             this.showNotification(`备份错误: ${error.message}`, 'error');
         }
     }
@@ -1461,6 +1513,8 @@ class LifeManagerApp {
         }
         
         try {
+            document.getElementById('syncStatus').innerHTML = `<div><i class="fas fa-spinner fa-spin"></i> 正在恢复数据...</div>`;
+            
             const response = await fetch(`https://api.github.com/gists/${gistId}`, {
                 headers: {
                     'Authorization': `token ${token}`,
@@ -1481,7 +1535,7 @@ class LifeManagerApp {
                 });
                 
                 localStorage.setItem('lastRestore', new Date().toISOString());
-                document.getElementById('lastRestore').textContent = new Date().toLocaleString();
+                document.getElementById('lastRestore').textContent = new Date().toLocaleString('zh-CN');
                 
                 // 刷新界面
                 this.loadTempData();
@@ -1489,11 +1543,15 @@ class LifeManagerApp {
                 this.loadImportantDates();
                 this.generateCalendar(this.currentDate.getFullYear(), this.currentDate.getMonth());
                 
+                document.getElementById('syncStatus').innerHTML = `<div style="color: var(--success-color);"><i class="fas fa-check-circle"></i> 数据恢复成功！</div>`;
                 this.showNotification('数据恢复成功！', 'success');
             } else {
+                const error = await response.json();
+                document.getElementById('syncStatus').innerHTML = `<div style="color: var(--danger-color);"><i class="fas fa-times-circle"></i> 恢复失败: ${error.message || '未知错误'}</div>`;
                 this.showNotification('恢复失败，请检查Gist ID是否正确', 'error');
             }
         } catch (error) {
+            document.getElementById('syncStatus').innerHTML = `<div style="color: var(--danger-color);"><i class="fas fa-times-circle"></i> 恢复错误: ${error.message}</div>`;
             this.showNotification(`恢复错误: ${error.message}`, 'error');
         }
     }
@@ -1569,31 +1627,30 @@ class LifeManagerApp {
             notification.classList.remove('show');
         }, 3000);
     }
+    
+    addDefaultRow(moduleType) {
+        switch(moduleType) {
+            case 'work':
+                this.addWorkRow();
+                break;
+            case 'study':
+                this.addStudyRow();
+                break;
+            case 'exercise':
+                this.addExerciseRow();
+                break;
+            case 'entertainment':
+                this.addEntertainmentRow();
+                break;
+            case 'finance':
+                this.addIncomeRow();
+                this.addExpenseRow();
+                break;
+        }
+    }
 }
 
 // 初始化应用
 document.addEventListener('DOMContentLoaded', () => {
     window.app = new LifeManagerApp();
 });
-
-// 添加默认行函数
-LifeManagerApp.prototype.addDefaultRow = function(moduleType) {
-    switch(moduleType) {
-        case 'work':
-            this.addWorkRow();
-            break;
-        case 'study':
-            this.addStudyRow();
-            break;
-        case 'exercise':
-            this.addExerciseRow();
-            break;
-        case 'entertainment':
-            this.addEntertainmentRow();
-            break;
-        case 'finance':
-            this.addIncomeRow();
-            this.addExpenseRow();
-            break;
-    }
-};

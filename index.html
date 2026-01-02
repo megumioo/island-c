@@ -58,19 +58,21 @@
                     </div>
                     <div class="module-body">
                         <form class="module-form">
-                            <div class="form-group">
-                                <label>睡眠时长 (小时):</label>
-                                <input type="number" step="0.1" min="0" class="sleep-duration" placeholder="例如: 7.5">
-                            </div>
-                            <div class="form-group">
-                                <label>睡眠质量 (1-100分):</label>
-                                <input type="number" min="1" max="100" class="sleep-quality" placeholder="1-100">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>睡眠时长 (小时):</label>
+                                    <input type="number" step="0.1" min="0" class="form-control sleep-duration" placeholder="例如: 7.5">
+                                </div>
+                                <div class="form-group">
+                                    <label>睡眠质量 (1-100分):</label>
+                                    <input type="number" min="1" max="100" class="form-control sleep-quality" placeholder="1-100">
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label>睡眠感受:</label>
-                                <textarea class="sleep-feeling" rows="2" placeholder="睡得怎么样？"></textarea>
+                                <textarea class="form-control sleep-feeling" rows="2" placeholder="睡得怎么样？"></textarea>
                             </div>
-                            <button type="button" class="save-btn temp-save"><i class="fas fa-save"></i> 暂时保存</button>
+                            <button type="button" class="btn btn-primary temp-save"><i class="fas fa-save"></i> 暂时保存</button>
                         </form>
                     </div>
                 </div>
@@ -85,13 +87,13 @@
                         <form class="module-form">
                             <div class="form-group">
                                 <label>早餐内容:</label>
-                                <textarea class="breakfast-content" rows="2" placeholder="今天早餐吃了什么？"></textarea>
+                                <textarea class="form-control breakfast-content" rows="2" placeholder="今天早餐吃了什么？"></textarea>
                             </div>
                             <div class="form-group">
                                 <label>早餐感受:</label>
-                                <textarea class="breakfast-feeling" rows="2" placeholder="味道如何？"></textarea>
+                                <textarea class="form-control breakfast-feeling" rows="2" placeholder="味道如何？"></textarea>
                             </div>
-                            <button type="button" class="save-btn temp-save"><i class="fas fa-save"></i> 暂时保存</button>
+                            <button type="button" class="btn btn-primary temp-save"><i class="fas fa-save"></i> 暂时保存</button>
                         </form>
                     </div>
                 </div>
@@ -105,18 +107,18 @@
                     <div class="module-body">
                         <form class="module-form">
                             <div class="work-entries">
-                                <div class="work-row">
-                                    <div class="form-group">
-                                        <input type="text" class="work-todo" placeholder="待办事项">
+                                <div class="form-row align-center">
+                                    <div class="form-group flex-1">
+                                        <input type="text" class="form-control work-todo" placeholder="待办事项">
                                     </div>
-                                    <div class="form-group">
-                                        <input type="text" class="work-done" placeholder="完成情况">
+                                    <div class="form-group flex-1">
+                                        <input type="text" class="form-control work-done" placeholder="完成情况">
                                     </div>
-                                    <button type="button" class="remove-row-btn"><i class="fas fa-times"></i></button>
+                                    <button type="button" class="btn btn-remove remove-row-btn"><i class="fas fa-times"></i></button>
                                 </div>
                             </div>
-                            <button type="button" class="add-row-btn"><i class="fas fa-plus"></i> 添加任务</button>
-                            <button type="button" class="save-btn temp-save"><i class="fas fa-save"></i> 暂时保存</button>
+                            <button type="button" class="btn btn-secondary add-row-btn"><i class="fas fa-plus"></i> 添加任务</button>
+                            <button type="button" class="btn btn-primary temp-save"><i class="fas fa-save"></i> 暂时保存</button>
                         </form>
                     </div>
                 </div>
@@ -174,7 +176,7 @@
                             <div class="chores-score">
                                 <strong>家务得分: <span id="choresTotal">0</span> 分</strong>
                             </div>
-                            <button type="button" class="save-btn temp-save"><i class="fas fa-save"></i> 暂时保存</button>
+                            <button type="button" class="btn btn-primary temp-save"><i class="fas fa-save"></i> 暂时保存</button>
                         </form>
                     </div>
                 </div>
@@ -188,10 +190,10 @@
                     <div class="module-body">
                         <form class="module-form">
                             <div class="study-entries">
-                                <div class="study-row">
-                                    <div class="form-group">
+                                <div class="form-row align-center">
+                                    <div class="form-group flex-1">
                                         <label>科目:</label>
-                                        <select class="study-subject">
+                                        <select class="form-control study-subject">
                                             <option value="逻辑">逻辑</option>
                                             <option value="数学">数学</option>
                                             <option value="英语">英语</option>
@@ -199,23 +201,23 @@
                                             <option value="其他">其他</option>
                                         </select>
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group flex-1">
                                         <label>时长 (小时):</label>
-                                        <input type="number" step="0.1" min="0" class="study-duration" placeholder="例如: 2">
+                                        <input type="number" step="0.1" min="0" class="form-control study-duration" placeholder="例如: 2">
                                     </div>
-                                    <div class="form-group full-width">
-                                        <label>学习内容:</label>
-                                        <textarea class="study-content" rows="2" placeholder="学习了什么？"></textarea>
-                                    </div>
-                                    <div class="form-group full-width">
-                                        <label>学习总结:</label>
-                                        <textarea class="study-summary" rows="2" placeholder="有什么收获？"></textarea>
-                                    </div>
-                                    <button type="button" class="remove-row-btn"><i class="fas fa-times"></i></button>
+                                    <button type="button" class="btn btn-remove remove-row-btn"><i class="fas fa-times"></i></button>
+                                </div>
+                                <div class="form-group">
+                                    <label>学习内容:</label>
+                                    <textarea class="form-control study-content" rows="2" placeholder="学习了什么？"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label>学习总结:</label>
+                                    <textarea class="form-control study-summary" rows="2" placeholder="有什么收获？"></textarea>
                                 </div>
                             </div>
-                            <button type="button" class="add-study-btn"><i class="fas fa-plus"></i> 添加学习记录</button>
-                            <button type="button" class="save-btn temp-save"><i class="fas fa-save"></i> 暂时保存</button>
+                            <button type="button" class="btn btn-secondary add-study-btn"><i class="fas fa-plus"></i> 添加学习记录</button>
+                            <button type="button" class="btn btn-primary temp-save"><i class="fas fa-save"></i> 暂时保存</button>
                         </form>
                     </div>
                 </div>
@@ -230,13 +232,13 @@
                         <form class="module-form">
                             <div class="form-group">
                                 <label>午餐内容:</label>
-                                <textarea class="lunch-content" rows="2" placeholder="今天午餐吃了什么？"></textarea>
+                                <textarea class="form-control lunch-content" rows="2" placeholder="今天午餐吃了什么？"></textarea>
                             </div>
                             <div class="form-group">
                                 <label>午餐感受:</label>
-                                <textarea class="lunch-feeling" rows="2" placeholder="味道如何？"></textarea>
+                                <textarea class="form-control lunch-feeling" rows="2" placeholder="味道如何？"></textarea>
                             </div>
-                            <button type="button" class="save-btn temp-save"><i class="fas fa-save"></i> 暂时保存</button>
+                            <button type="button" class="btn btn-primary temp-save"><i class="fas fa-save"></i> 暂时保存</button>
                         </form>
                     </div>
                 </div>
@@ -249,19 +251,21 @@
                     </div>
                     <div class="module-body">
                         <form class="module-form">
-                            <div class="form-group">
-                                <label>睡眠时长 (小时):</label>
-                                <input type="number" step="0.1" min="0" class="nap-duration" placeholder="例如: 0.5">
-                            </div>
-                            <div class="form-group">
-                                <label>睡眠质量 (1-100分):</label>
-                                <input type="number" min="1" max="100" class="nap-quality" placeholder="1-100">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>睡眠时长 (小时):</label>
+                                    <input type="number" step="0.1" min="0" class="form-control nap-duration" placeholder="例如: 0.5">
+                                </div>
+                                <div class="form-group">
+                                    <label>睡眠质量 (1-100分):</label>
+                                    <input type="number" min="1" max="100" class="form-control nap-quality" placeholder="1-100">
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label>睡眠感受:</label>
-                                <textarea class="nap-feeling" rows="2" placeholder="休息得怎么样？"></textarea>
+                                <textarea class="form-control nap-feeling" rows="2" placeholder="休息得怎么样？"></textarea>
                             </div>
-                            <button type="button" class="save-btn temp-save"><i class="fas fa-save"></i> 暂时保存</button>
+                            <button type="button" class="btn btn-primary temp-save"><i class="fas fa-save"></i> 暂时保存</button>
                         </form>
                     </div>
                 </div>
@@ -276,13 +280,13 @@
                         <form class="module-form">
                             <div class="form-group">
                                 <label>晚餐内容:</label>
-                                <textarea class="dinner-content" rows="2" placeholder="今天晚餐吃了什么？"></textarea>
+                                <textarea class="form-control dinner-content" rows="2" placeholder="今天晚餐吃了什么？"></textarea>
                             </div>
                             <div class="form-group">
                                 <label>晚餐感受:</label>
-                                <textarea class="dinner-feeling" rows="2" placeholder="味道如何？"></textarea>
+                                <textarea class="form-control dinner-feeling" rows="2" placeholder="味道如何？"></textarea>
                             </div>
-                            <button type="button" class="save-btn temp-save"><i class="fas fa-save"></i> 暂时保存</button>
+                            <button type="button" class="btn btn-primary temp-save"><i class="fas fa-save"></i> 暂时保存</button>
                         </form>
                     </div>
                 </div>
@@ -296,10 +300,10 @@
                     <div class="module-body">
                         <form class="module-form">
                             <div class="exercise-entries">
-                                <div class="exercise-row">
-                                    <div class="form-group">
+                                <div class="form-row align-center">
+                                    <div class="form-group flex-1">
                                         <label>运动类型:</label>
-                                        <select class="exercise-type">
+                                        <select class="form-control exercise-type">
                                             <option value="有氧">有氧</option>
                                             <option value="无氧">无氧</option>
                                             <option value="力量">力量</option>
@@ -307,23 +311,23 @@
                                             <option value="舞力全开">舞力全开</option>
                                         </select>
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group flex-1">
                                         <label>时长 (小时):</label>
-                                        <input type="number" step="0.1" min="0" class="exercise-duration" placeholder="例如: 1">
+                                        <input type="number" step="0.1" min="0" class="form-control exercise-duration" placeholder="例如: 1">
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group flex-1">
                                         <label>消耗热量 (千卡):</label>
-                                        <input type="number" min="0" class="exercise-calories" placeholder="例如: 300">
+                                        <input type="number" min="0" class="form-control exercise-calories" placeholder="例如: 300">
                                     </div>
-                                    <div class="form-group full-width">
-                                        <label>运动感受:</label>
-                                        <textarea class="exercise-feeling" rows="2" placeholder="感觉如何？"></textarea>
-                                    </div>
-                                    <button type="button" class="remove-row-btn"><i class="fas fa-times"></i></button>
+                                    <button type="button" class="btn btn-remove remove-row-btn"><i class="fas fa-times"></i></button>
+                                </div>
+                                <div class="form-group">
+                                    <label>运动感受:</label>
+                                    <textarea class="form-control exercise-feeling" rows="2" placeholder="感觉如何？"></textarea>
                                 </div>
                             </div>
-                            <button type="button" class="add-exercise-btn"><i class="fas fa-plus"></i> 添加运动记录</button>
-                            <button type="button" class="save-btn temp-save"><i class="fas fa-save"></i> 暂时保存</button>
+                            <button type="button" class="btn btn-secondary add-exercise-btn"><i class="fas fa-plus"></i> 添加运动记录</button>
+                            <button type="button" class="btn btn-primary temp-save"><i class="fas fa-save"></i> 暂时保存</button>
                         </form>
                     </div>
                 </div>
@@ -336,19 +340,21 @@
                     </div>
                     <div class="module-body">
                         <form class="module-form">
-                            <div class="form-group">
-                                <label>游戏名称:</label>
-                                <input type="text" class="game-name" placeholder="玩的是什么游戏？">
-                            </div>
-                            <div class="form-group">
-                                <label>游戏时长 (小时):</label>
-                                <input type="number" step="0.1" min="0" class="game-duration" placeholder="例如: 2">
+                            <div class="form-row">
+                                <div class="form-group flex-1">
+                                    <label>游戏名称:</label>
+                                    <input type="text" class="form-control game-name" placeholder="玩的是什么游戏？">
+                                </div>
+                                <div class="form-group flex-1">
+                                    <label>游戏时长 (小时):</label>
+                                    <input type="number" step="0.1" min="0" class="form-control game-duration" placeholder="例如: 2">
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label>游戏感受:</label>
-                                <textarea class="game-feeling" rows="2" placeholder="玩得开心吗？"></textarea>
+                                <textarea class="form-control game-feeling" rows="2" placeholder="玩得开心吗？"></textarea>
                             </div>
-                            <button type="button" class="save-btn temp-save"><i class="fas fa-save"></i> 暂时保存</button>
+                            <button type="button" class="btn btn-primary temp-save"><i class="fas fa-save"></i> 暂时保存</button>
                         </form>
                     </div>
                 </div>
@@ -362,10 +368,10 @@
                     <div class="module-body">
                         <form class="module-form">
                             <div class="entertainment-entries">
-                                <div class="entertainment-row">
-                                    <div class="form-group">
+                                <div class="form-row align-center">
+                                    <div class="form-group flex-1">
                                         <label>娱乐类型:</label>
-                                        <select class="entertainment-type">
+                                        <select class="form-control entertainment-type">
                                             <option value="动画">动画</option>
                                             <option value="电影">电影</option>
                                             <option value="拼豆">拼豆</option>
@@ -373,19 +379,19 @@
                                             <option value="其他">其他</option>
                                         </select>
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group flex-1">
                                         <label>时长 (小时):</label>
-                                        <input type="number" step="0.1" min="0" class="entertainment-duration" placeholder="例如: 1.5">
+                                        <input type="number" step="0.1" min="0" class="form-control entertainment-duration" placeholder="例如: 1.5">
                                     </div>
-                                    <div class="form-group full-width">
-                                        <label>娱乐感受:</label>
-                                        <textarea class="entertainment-feeling" rows="2" placeholder="感觉如何？"></textarea>
-                                    </div>
-                                    <button type="button" class="remove-row-btn"><i class="fas fa-times"></i></button>
+                                    <button type="button" class="btn btn-remove remove-row-btn"><i class="fas fa-times"></i></button>
+                                </div>
+                                <div class="form-group">
+                                    <label>娱乐感受:</label>
+                                    <textarea class="form-control entertainment-feeling" rows="2" placeholder="感觉如何？"></textarea>
                                 </div>
                             </div>
-                            <button type="button" class="add-entertainment-btn"><i class="fas fa-plus"></i> 添加娱乐记录</button>
-                            <button type="button" class="save-btn temp-save"><i class="fas fa-save"></i> 暂时保存</button>
+                            <button type="button" class="btn btn-secondary add-entertainment-btn"><i class="fas fa-plus"></i> 添加娱乐记录</button>
+                            <button type="button" class="btn btn-primary temp-save"><i class="fas fa-save"></i> 暂时保存</button>
                         </form>
                     </div>
                 </div>
@@ -402,38 +408,38 @@
                             <div class="finance-section">
                                 <h4>收入</h4>
                                 <div class="income-entries">
-                                    <div class="finance-row">
-                                        <div class="form-group">
+                                    <div class="form-row align-center">
+                                        <div class="form-group flex-1">
                                             <label>分类:</label>
-                                            <select class="income-category">
+                                            <select class="form-control income-category">
                                                 <option value="工资">工资</option>
                                                 <option value="兼职">兼职</option>
                                                 <option value="礼物">礼物</option>
                                                 <option value="其他">其他</option>
                                             </select>
                                         </div>
-                                        <div class="form-group">
+                                        <div class="form-group flex-1">
                                             <label>金额:</label>
-                                            <input type="number" min="0" class="income-amount" placeholder="金额">
+                                            <input type="number" min="0" class="form-control income-amount" placeholder="金额">
                                         </div>
-                                        <div class="form-group full-width">
+                                        <div class="form-group flex-2">
                                             <label>描述:</label>
-                                            <input type="text" class="income-description" placeholder="收入描述">
+                                            <input type="text" class="form-control income-description" placeholder="收入描述">
                                         </div>
-                                        <button type="button" class="remove-row-btn"><i class="fas fa-times"></i></button>
+                                        <button type="button" class="btn btn-remove remove-row-btn"><i class="fas fa-times"></i></button>
                                     </div>
                                 </div>
-                                <button type="button" class="add-income-btn"><i class="fas fa-plus"></i> 添加收入记录</button>
+                                <button type="button" class="btn btn-secondary add-income-btn"><i class="fas fa-plus"></i> 添加收入记录</button>
                             </div>
                             
                             <!-- 支出部分 -->
                             <div class="finance-section">
                                 <h4>支出</h4>
                                 <div class="expense-entries">
-                                    <div class="finance-row">
-                                        <div class="form-group">
+                                    <div class="form-row align-center">
+                                        <div class="form-group flex-1">
                                             <label>分类:</label>
-                                            <select class="expense-category">
+                                            <select class="form-control expense-category">
                                                 <option value="餐饮">餐饮</option>
                                                 <option value="购物">购物</option>
                                                 <option value="娱乐">娱乐</option>
@@ -441,21 +447,21 @@
                                                 <option value="其他">其他</option>
                                             </select>
                                         </div>
-                                        <div class="form-group">
+                                        <div class="form-group flex-1">
                                             <label>金额:</label>
-                                            <input type="number" min="0" class="expense-amount" placeholder="金额">
+                                            <input type="number" min="0" class="form-control expense-amount" placeholder="金额">
                                         </div>
-                                        <div class="form-group full-width">
+                                        <div class="form-group flex-2">
                                             <label>描述:</label>
-                                            <input type="text" class="expense-description" placeholder="支出描述">
+                                            <input type="text" class="form-control expense-description" placeholder="支出描述">
                                         </div>
-                                        <button type="button" class="remove-row-btn"><i class="fas fa-times"></i></button>
+                                        <button type="button" class="btn btn-remove remove-row-btn"><i class="fas fa-times"></i></button>
                                     </div>
                                 </div>
-                                <button type="button" class="add-expense-btn"><i class="fas fa-plus"></i> 添加支出记录</button>
+                                <button type="button" class="btn btn-secondary add-expense-btn"><i class="fas fa-plus"></i> 添加支出记录</button>
                             </div>
                             
-                            <button type="button" class="save-btn temp-save"><i class="fas fa-save"></i> 暂时保存</button>
+                            <button type="button" class="btn btn-primary temp-save"><i class="fas fa-save"></i> 暂时保存</button>
                         </form>
                     </div>
                 </div>
@@ -525,7 +531,7 @@
                     <!-- NPC卡片会通过JS动态生成 -->
                 </div>
                 
-                <button type="button" class="save-btn" id="saveCheckinBtn"><i class="fas fa-save"></i> 保存打卡</button>
+                <button type="button" class="btn btn-primary" id="saveCheckinBtn"><i class="fas fa-save"></i> 保存打卡</button>
             </div>
         </section>
 
@@ -534,9 +540,9 @@
             <h2><i class="fas fa-calendar-alt"></i> 日历视图</h2>
             
             <div class="calendar-controls">
-                <button id="prevMonth"><i class="fas fa-chevron-left"></i></button>
+                <button id="prevMonth" class="btn btn-icon"><i class="fas fa-chevron-left"></i></button>
                 <h3 id="currentMonthYear">2023年10月</h3>
-                <button id="nextMonth"><i class="fas fa-chevron-right"></i></button>
+                <button id="nextMonth" class="btn btn-icon"><i class="fas fa-chevron-right"></i></button>
             </div>
             
             <div class="calendar-container">
@@ -552,33 +558,33 @@
             <div class="important-dates-section">
                 <h3><i class="fas fa-star"></i> 重要日期管理</h3>
                 
-                <form id="importantDateForm">
+                <form id="importantDateForm" class="important-date-form">
                     <div class="form-row">
-                        <div class="form-group">
+                        <div class="form-group flex-1">
                             <label>日期标题:</label>
-                            <input type="text" id="dateTitle" placeholder="例如: 纪念日" required>
+                            <input type="text" id="dateTitle" class="form-control" placeholder="例如: 纪念日" required>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group flex-1">
                             <label>日期:</label>
-                            <input type="date" id="dateDate" required>
+                            <input type="date" id="dateDate" class="form-control" required>
                         </div>
                     </div>
                     <div class="form-row">
-                        <div class="form-group">
+                        <div class="form-group flex-1">
                             <label>类型:</label>
-                            <select id="dateType">
+                            <select id="dateType" class="form-control">
                                 <option value="纪念日">纪念日</option>
                                 <option value="截止日期">截止日期</option>
                                 <option value="生日">生日</option>
                                 <option value="其他">其他</option>
                             </select>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group flex-1">
                             <label>标记颜色:</label>
-                            <input type="color" id="dateColor" value="#FF6B6B">
+                            <input type="color" id="dateColor" class="form-control color-picker" value="#FF6B6B">
                         </div>
                     </div>
-                    <button type="submit" class="save-btn"><i class="fas fa-plus"></i> 添加重要日期</button>
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-plus"></i> 添加重要日期</button>
                 </form>
                 
                 <div class="important-dates-list" id="importantDatesList">
@@ -602,23 +608,19 @@
             <div class="analytics-controls">
                 <div class="form-group">
                     <label>统计周期:</label>
-                    <select id="analyticsPeriod">
+                    <select id="analyticsPeriod" class="form-control">
                         <option value="7">最近7天</option>
-                        <option value="30">最近30天</option>
+                        <option value="30" selected>最近30天</option>
                         <option value="90">最近90天</option>
                         <option value="all">全部数据</option>
                     </select>
                 </div>
-                <button id="refreshAnalytics" class="save-btn"><i class="fas fa-sync-alt"></i> 刷新数据</button>
+                <button id="refreshAnalytics" class="btn btn-secondary"><i class="fas fa-sync-alt"></i> 刷新数据</button>
             </div>
             
             <!-- 健康数据 -->
             <div class="analytics-section">
                 <h3><i class="fas fa-heartbeat"></i> 健康数据</h3>
-                <div class="charts-container">
-                    <canvas id="sleepChart"></canvas>
-                    <canvas id="exerciseChart"></canvas>
-                </div>
                 <div class="stats-grid" id="healthStats">
                     <!-- 健康统计数据 -->
                 </div>
@@ -627,9 +629,6 @@
             <!-- 学习数据 -->
             <div class="analytics-section">
                 <h3><i class="fas fa-graduation-cap"></i> 学习数据</h3>
-                <div class="charts-container">
-                    <canvas id="studyChart"></canvas>
-                </div>
                 <div class="stats-grid" id="studyStats">
                     <!-- 学习统计数据 -->
                 </div>
@@ -638,9 +637,6 @@
             <!-- 家务数据 -->
             <div class="analytics-section">
                 <h3><i class="fas fa-home"></i> 家务数据</h3>
-                <div class="charts-container">
-                    <canvas id="choresChart"></canvas>
-                </div>
                 <div class="stats-grid" id="choresStats">
                     <!-- 家务统计数据 -->
                 </div>
@@ -649,9 +645,6 @@
             <!-- 财务数据 -->
             <div class="analytics-section">
                 <h3><i class="fas fa-wallet"></i> 财务数据</h3>
-                <div class="charts-container">
-                    <canvas id="financeChart"></canvas>
-                </div>
                 <div class="stats-grid" id="financeStats">
                     <!-- 财务统计数据 -->
                 </div>
@@ -660,9 +653,6 @@
             <!-- 娱乐数据 -->
             <div class="analytics-section">
                 <h3><i class="fas fa-gamepad"></i> 娱乐数据</h3>
-                <div class="charts-container">
-                    <canvas id="entertainmentChart"></canvas>
-                </div>
                 <div class="stats-grid" id="entertainmentStats">
                     <!-- 娱乐统计数据 -->
                 </div>
@@ -694,20 +684,20 @@
             <div class="sync-config">
                 <div class="form-group">
                     <label>GitHub Token:</label>
-                    <input type="password" id="githubToken" placeholder="输入Personal Access Token">
+                    <input type="password" id="githubToken" class="form-control" placeholder="输入Personal Access Token">
                 </div>
                 <div class="form-group">
                     <label>Gist ID (可选):</label>
-                    <input type="text" id="gistId" placeholder="已有Gist ID，留空则创建新的">
+                    <input type="text" id="gistId" class="form-control" placeholder="已有Gist ID，留空则创建新的">
                 </div>
                 <div class="form-group">
                     <label>加密密钥:</label>
-                    <input type="text" id="encryptionKey" value="xiaohang-xiaodao-xiaodao" placeholder="用于数据加密的密钥">
+                    <input type="text" id="encryptionKey" class="form-control" value="xiaohang-xiaodao-xiaodao" placeholder="用于数据加密的密钥">
                 </div>
                 <div class="sync-buttons">
-                    <button id="testConnection" class="save-btn"><i class="fas fa-plug"></i> 测试连接</button>
-                    <button id="backupData" class="save-btn"><i class="fas fa-cloud-upload-alt"></i> 备份数据</button>
-                    <button id="restoreData" class="save-btn"><i class="fas fa-cloud-download-alt"></i> 恢复数据</button>
+                    <button id="testConnection" class="btn btn-secondary"><i class="fas fa-plug"></i> 测试连接</button>
+                    <button id="backupData" class="btn btn-primary"><i class="fas fa-cloud-upload-alt"></i> 备份数据</button>
+                    <button id="restoreData" class="btn btn-primary"><i class="fas fa-cloud-download-alt"></i> 恢复数据</button>
                 </div>
             </div>
             
@@ -725,9 +715,9 @@
             <div class="data-management">
                 <h3><i class="fas fa-database"></i> 数据管理</h3>
                 <div class="data-buttons">
-                    <button id="exportData" class="save-btn"><i class="fas fa-file-export"></i> 导出数据</button>
-                    <button id="importData" class="save-btn"><i class="fas fa-file-import"></i> 导入数据</button>
-                    <button id="clearLocalData" class="save-btn danger"><i class="fas fa-trash-alt"></i> 清空本地数据</button>
+                    <button id="exportData" class="btn btn-secondary"><i class="fas fa-file-export"></i> 导出数据</button>
+                    <button id="importData" class="btn btn-secondary"><i class="fas fa-file-import"></i> 导入数据</button>
+                    <button id="clearLocalData" class="btn btn-danger"><i class="fas fa-trash-alt"></i> 清空本地数据</button>
                 </div>
             </div>
         </section>
@@ -737,7 +727,6 @@
     <div id="notification" class="notification"></div>
 
     <!-- 脚本 -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="app.js"></script>
     
     <!-- PWA注册 -->
