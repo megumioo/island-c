@@ -23,6 +23,7 @@ class LifeManagerApp {
         this.renderAcNpcs();
         this.updateChoresScore();
         this.refreshAnalytics();
+        this.initOverviewPanel(); // 初始化今日概览面板
     }
     
     setupEventListeners() {
@@ -62,6 +63,7 @@ class LifeManagerApp {
             btn.addEventListener('click', (e) => {
                 this.saveModuleData(e.target.closest('.module-card'));
                 this.showNotification('数据已暂时保存', 'success');
+                this.updateOverviewData(); // 保存时更新概览数据
             });
         });
         
@@ -72,6 +74,7 @@ class LifeManagerApp {
         document.querySelector('.add-entertainment-btn')?.addEventListener('click', () => this.addEntertainmentRow());
         document.querySelector('.add-income-btn')?.addEventListener('click', () => this.addIncomeRow());
         document.querySelector('.add-expense-btn')?.addEventListener('click', () => this.addExpenseRow());
+        document.querySelector('.add-game-btn')?.addEventListener('click', () => this.addGameRow()); // 新增游戏添加按钮
         
         // 删除行
         document.addEventListener('click', (e) => {
@@ -92,16 +95,23 @@ class LifeManagerApp {
                         this.addDefaultRow(moduleType);
                     }
                 }
+                this.updateOverviewData(); // 删除时更新概览数据
             }
         });
         
         // 家务记录计分
         document.querySelectorAll('.chore-item').forEach(checkbox => {
-            checkbox.addEventListener('change', () => this.updateChoresScore());
+            checkbox.addEventListener('change', () => {
+                this.updateChoresScore();
+                this.updateOverviewData(); // 更新概览数据
+            });
         });
         
         // 打卡保存
-        document.getElementById('saveCheckinBtn')?.addEventListener('click', () => this.saveCheckinData());
+        document.getElementById('saveCheckinBtn')?.addEventListener('click', () => {
+            this.saveCheckinData();
+            this.updateOverviewData(); // 更新概览数据
+        });
         
         // 动森版本切换
         document.querySelectorAll('input[name="ac-version"]').forEach(radio => {
@@ -150,6 +160,163 @@ class LifeManagerApp {
         if (workEntries && workEntries.children.length === 0) {
             this.addWorkRow();
         }
+    }
+    
+    // 初始化今日概览面板
+    initOverviewPanel() {
+        // 创建概览面板HTML结构
+        const overviewHTML = `
+            <div class="overview-panel" id="overviewPanel">
+                <div class="overview-header">
+                    <h3><i class="fas fa-calendar-day"></i> 今日概览</h3>
+                    <button class="overview-close" id="overviewClose">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="overview-date" id="overviewCurrentDate"></div>
+                <div class="overview-content" id="overviewContent">
+                    <div class="overview-loading">
+                        <i class="fas fa-spinner fa-spin"></i> 加载中...
+                    </div>
+                </div>
+            </div>
+            <button class="overview-toggle-btn" id="overviewToggleBtn">
+                <i class="fas fa-chart-pie"></i>
+            </button>
+        `;
+        
+        // 添加到body
+        document.body.insertAdjacentHTML('beforeend', overviewHTML);
+        
+        // 设置今日日期
+        const now = new Date();
+        const formattedDate = `${now.getFullYear()}年${now.getMonth() + 1}月${now.getDate()}日`;
+        document.getElementById('overviewCurrentDate').textContent = formattedDate;
+        
+        // 绑定事件
+        document.getElementById('overviewToggleBtn').addEventListener('click', () => this.toggleOverviewPanel());
+        document.getElementById('overviewClose').addEventListener('click', () => this.hideOverviewPanel());
+        
+        // 点击面板外部关闭
+        document.addEventListener('click', (e) => {
+            const panel = document.getElementById('overviewPanel');
+            const toggleBtn = document.getElementById('overviewToggleBtn');
+            if (panel && panel.classList.contains('show') && 
+                !panel.contains(e.target) && 
+                !toggleBtn.contains(e.target)) {
+                this.hideOverviewPanel();
+            }
+        });
+        
+        // 初始加载概览数据
+        this.updateOverviewData();
+    }
+    
+    // 切换概览面板显示/隐藏
+    toggleOverviewPanel() {
+        const panel = document.getElementById('overviewPanel');
+        panel.classList.toggle('show');
+        if (panel.classList.contains('show')) {
+            this.updateOverviewData();
+        }
+    }
+    
+    // 隐藏概览面板
+    hideOverviewPanel() {
+        const panel = document.getElementById('overviewPanel');
+        panel.classList.remove('show');
+    }
+    
+    // 更新概览数据
+    updateOverviewData() {
+        const content = document.getElementById('overviewContent');
+        const dateKey = this.getDateKey();
+        
+        // 获取各模块今日数据
+        const data = {
+            work: { tasks: [], completed: 0, total: 0 },
+            chores: { score: 0, total: 10 },
+            finance: { incomeCount: 0, expenseCount: 0, incomeTotal: 0, expenseTotal: 0 }
+        };
+        
+        // 工作数据
+        const workData = localStorage.getItem(`work_TEMP_${dateKey}`);
+        if (workData) {
+            const workEntries = JSON.parse(workData);
+            if (Array.isArray(workEntries)) {
+                data.work.total = workEntries.length;
+                data.work.completed = workEntries.filter(entry => entry.done && entry.done.trim() !== '').length;
+            }
+        }
+        
+        // 家务数据
+        const choresData = localStorage.getItem(`chores_TEMP_${dateKey}`);
+        if (choresData) {
+            const chores = JSON.parse(choresData);
+            if (Array.isArray(chores)) {
+                data.chores.score = chores.length;
+            }
+        }
+        
+        // 财务数据
+        const financeData = localStorage.getItem(`finance_TEMP_${dateKey}`);
+        if (financeData) {
+            const finance = JSON.parse(financeData);
+            if (finance.income && Array.isArray(finance.income)) {
+                data.finance.incomeCount = finance.income.length;
+                data.finance.incomeTotal = finance.income.reduce((sum, item) => sum + (parseFloat(item.amount) || 0), 0);
+            }
+            if (finance.expense && Array.isArray(finance.expense)) {
+                data.finance.expenseCount = finance.expense.length;
+                data.finance.expenseTotal = finance.expense.reduce((sum, item) => sum + (parseFloat(item.amount) || 0), 0);
+            }
+        }
+        
+        // 生成HTML
+        let html = `
+            <div class="overview-section">
+                <h4><i class="fas fa-tasks"></i> 工作看板</h4>
+                <div class="overview-item">
+                    <span>完成任务:</span>
+                    <strong class="${data.work.completed === data.work.total && data.work.total > 0 ? 'text-success' : ''}">
+                        ${data.work.completed} / ${data.work.total}
+                    </strong>
+                </div>
+                ${data.work.total === 0 ? '<div class="overview-empty">暂无记录</div>' : ''}
+            </div>
+            
+            <div class="overview-section">
+                <h4><i class="fas fa-home"></i> 家务记录</h4>
+                <div class="overview-item">
+                    <span>家务得分:</span>
+                    <strong class="${data.chores.score >= 5 ? 'text-success' : ''}">
+                        ${data.chores.score} / ${data.chores.total}
+                    </strong>
+                </div>
+                ${data.chores.score === 0 ? '<div class="overview-empty">暂无记录</div>' : ''}
+            </div>
+            
+            <div class="overview-section">
+                <h4><i class="fas fa-wallet"></i> 财务记账</h4>
+                <div class="overview-item">
+                    <span>收入记录:</span>
+                    <strong>${data.finance.incomeCount} 笔</strong>
+                </div>
+                <div class="overview-item">
+                    <span>支出记录:</span>
+                    <strong>${data.finance.expenseCount} 笔</strong>
+                </div>
+                <div class="overview-item">
+                    <span>今日结余:</span>
+                    <strong class="${(data.finance.incomeTotal - data.finance.expenseTotal) >= 0 ? 'text-success' : 'text-danger'}">
+                        ¥${(data.finance.incomeTotal - data.finance.expenseTotal).toFixed(2)}
+                    </strong>
+                </div>
+                ${data.finance.incomeCount === 0 && data.finance.expenseCount === 0 ? '<div class="overview-empty">暂无记录</div>' : ''}
+            </div>
+        `;
+        
+        content.innerHTML = html;
     }
     
     switchSection(sectionId) {
@@ -233,11 +400,12 @@ class LifeManagerApp {
             case 'study':
                 const studyEntries = [];
                 card.querySelectorAll('.study-entries .form-row').forEach(row => {
+                    const rowContainer = row.closest('.game-entry-item') || row;
                     studyEntries.push({
-                        subject: row.querySelector('.study-subject').value,
-                        duration: row.querySelector('.study-duration').value,
-                        content: row.querySelector('.study-content').value,
-                        summary: row.querySelector('.study-summary').value
+                        subject: rowContainer.querySelector('.study-subject').value,
+                        duration: rowContainer.querySelector('.study-duration').value,
+                        content: rowContainer.querySelector('.study-content').value,
+                        summary: rowContainer.querySelector('.study-summary').value
                     });
                 });
                 data = studyEntries;
@@ -268,31 +436,37 @@ class LifeManagerApp {
             case 'exercise':
                 const exerciseEntries = [];
                 card.querySelectorAll('.exercise-entries .form-row').forEach(row => {
+                    const rowContainer = row.closest('.game-entry-item') || row;
                     exerciseEntries.push({
-                        type: row.querySelector('.exercise-type').value,
-                        duration: row.querySelector('.exercise-duration').value,
-                        calories: row.querySelector('.exercise-calories').value,
-                        feeling: row.querySelector('.exercise-feeling').value
+                        type: rowContainer.querySelector('.exercise-type').value,
+                        duration: rowContainer.querySelector('.exercise-duration').value,
+                        calories: rowContainer.querySelector('.exercise-calories').value,
+                        feeling: rowContainer.querySelector('.exercise-feeling').value
                     });
                 });
                 data = exerciseEntries;
                 break;
                 
             case 'game':
-                data = {
-                    name: card.querySelector('.game-name').value,
-                    duration: card.querySelector('.game-duration').value,
-                    feeling: card.querySelector('.game-feeling').value
-                };
+                const gameEntries = [];
+                card.querySelectorAll('.game-entry-item').forEach(item => {
+                    gameEntries.push({
+                        name: item.querySelector('.game-name').value,
+                        duration: item.querySelector('.game-duration').value,
+                        feeling: item.querySelector('.game-feeling').value
+                    });
+                });
+                data = gameEntries;
                 break;
                 
             case 'entertainment':
                 const entertainmentEntries = [];
                 card.querySelectorAll('.entertainment-entries .form-row').forEach(row => {
+                    const rowContainer = row.closest('.game-entry-item') || row;
                     entertainmentEntries.push({
-                        type: row.querySelector('.entertainment-type').value,
-                        duration: row.querySelector('.entertainment-duration').value,
-                        feeling: row.querySelector('.entertainment-feeling').value
+                        type: rowContainer.querySelector('.entertainment-type').value,
+                        duration: rowContainer.querySelector('.entertainment-duration').value,
+                        feeling: rowContainer.querySelector('.entertainment-feeling').value
                     });
                 });
                 data = entertainmentEntries;
@@ -337,6 +511,9 @@ class LifeManagerApp {
                 // 如果没有数据，为需要多行输入的模块添加默认行
                 if (moduleName === 'work' && !card.querySelector('.work-entries .form-row')) {
                     this.addWorkRow();
+                }
+                if (moduleName === 'game' && !card.querySelector('.game-entry-item')) {
+                    this.addGameRow();
                 }
                 return;
             }
@@ -417,9 +594,20 @@ class LifeManagerApp {
                     break;
                     
                 case 'game':
-                    card.querySelector('.game-name').value = parsedData.name || '';
-                    card.querySelector('.game-duration').value = parsedData.duration || '';
-                    card.querySelector('.game-feeling').value = parsedData.feeling || '';
+                    const gameContainer = card.querySelector('.game-entries');
+                    gameContainer.innerHTML = '';
+                    if (Array.isArray(parsedData) && parsedData.length > 0) {
+                        parsedData.forEach(entry => {
+                            this.addGameRow(entry.name, entry.duration, entry.feeling);
+                        });
+                    } else {
+                        // 兼容旧版单条数据格式
+                        if (parsedData.name || parsedData.duration || parsedData.feeling) {
+                            this.addGameRow(parsedData.name, parsedData.duration, parsedData.feeling);
+                        } else {
+                            this.addGameRow();
+                        }
+                    }
                     break;
                     
                 case 'entertainment':
@@ -527,6 +715,33 @@ class LifeManagerApp {
         rowContainer.appendChild(contentDiv);
         rowContainer.appendChild(summaryDiv);
         container.appendChild(rowContainer);
+    }
+    
+    // 新增游戏记录行
+    addGameRow(name = '', duration = '', feeling = '') {
+        const container = document.querySelector('.game-entries');
+        
+        // 创建游戏记录项
+        const gameItem = document.createElement('div');
+        gameItem.className = 'game-entry-item';
+        gameItem.innerHTML = `
+            <div class="form-row align-center">
+                <div class="form-group flex-1">
+                    <label>游戏名称:</label>
+                    <input type="text" class="form-control game-name" placeholder="玩的是什么游戏？" value="${name}">
+                </div>
+                <div class="form-group flex-1">
+                    <label>游戏时长 (小时):</label>
+                    <input type="number" step="0.1" min="0" class="form-control game-duration" placeholder="例如: 2" value="${duration}">
+                </div>
+                <button type="button" class="btn btn-remove remove-row-btn"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="form-group">
+                <label>游戏感受:</label>
+                <textarea class="form-control game-feeling" rows="2" placeholder="玩得开心吗？">${feeling}</textarea>
+            </div>
+        `;
+        container.appendChild(gameItem);
     }
     
     addExerciseRow(type = '有氧', duration = '', calories = '', feeling = '') {
@@ -910,14 +1125,16 @@ class LifeManagerApp {
                     moduleData.forEach(item => {
                         html += `<div>${item.type}: ${item.duration}小时</div>`;
                     });
+                } else if (module === 'game') {
+                    moduleData.forEach(item => {
+                        html += `<div>${item.name}: ${item.duration}小时</div>`;
+                    });
                 }
             } else if (typeof moduleData === 'object') {
                 if (module === 'sleep' || module === 'nap') {
                     html += `时长: ${moduleData.duration}小时, 质量: ${moduleData.quality}分`;
                 } else if (module === 'breakfast' || module === 'lunch' || module === 'dinner') {
                     html += moduleData.content || '';
-                } else if (module === 'game') {
-                    html += `${moduleData.name}: ${moduleData.duration}小时`;
                 } else if (module === 'finance') {
                     if (moduleData.income && moduleData.income.length > 0) {
                         html += `<div>收入: ${moduleData.income.length}笔</div>`;
@@ -1542,6 +1759,7 @@ class LifeManagerApp {
                 this.loadCheckinData();
                 this.loadImportantDates();
                 this.generateCalendar(this.currentDate.getFullYear(), this.currentDate.getMonth());
+                this.updateOverviewData();
                 
                 document.getElementById('syncStatus').innerHTML = `<div style="color: var(--success-color);"><i class="fas fa-check-circle"></i> 数据恢复成功！</div>`;
                 this.showNotification('数据恢复成功！', 'success');
@@ -1598,6 +1816,7 @@ class LifeManagerApp {
                     this.loadCheckinData();
                     this.loadImportantDates();
                     this.generateCalendar(this.currentDate.getFullYear(), this.currentDate.getMonth());
+                    this.updateOverviewData();
                     
                     this.showNotification('数据导入成功！', 'success');
                 } catch (error) {
@@ -1645,6 +1864,9 @@ class LifeManagerApp {
             case 'finance':
                 this.addIncomeRow();
                 this.addExpenseRow();
+                break;
+            case 'game':
+                this.addGameRow();
                 break;
         }
     }
