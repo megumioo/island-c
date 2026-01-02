@@ -2,794 +2,757 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
-    
-    <!-- PWA相关meta标签 -->
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="小航小刀小岛">
-    <meta name="theme-color" content="#A3D9FF">
-    <meta name="msapplication-TileColor" content="#A3D9FF">
-    <meta name="msapplication-config" content="none">
-    
-    <!-- iOS Safari优化 -->
-    <meta name="format-detection" content="telephone=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    
-    <title>小航小刀小岛</title>
-    
-    <!-- Font Awesome 图标 -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-          crossorigin="anonymous"
-          referrerpolicy="no-referrer">
-    
-    <!-- 应用样式 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#A7C7E7">
+    <title>小航小刀小岛 - 生活管理</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
-    
-    <!-- PWA Manifest -->
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
     <link rel="manifest" href="manifest.json">
-    
-    <!-- 图标 -->
-    <link rel="icon" href="icons/favicon.ico" type="image/x-icon">
-    <link rel="apple-touch-icon" href="icons/icon-192x192.png">
-    <link rel="shortcut icon" href="icons/favicon.ico">
 </head>
 <body>
-    <!-- 导航侧边栏 -->
-    <div class="nav-sidebar" id="navSidebar">
-        <div class="nav-sidebar-header">
-            <h3 class="nav-sidebar-title">
-                <i class="fas fa-compass"></i> 功能导航
-            </h3>
-            <button class="close-nav" id="closeNav">
-                <i class="fas fa-times"></i>
-            </button>
+    <!-- 移动端底部导航栏 -->
+    <nav class="mobile-nav">
+        <div class="nav-item" data-page="records">
+            <i class="fas fa-book"></i>
+            <span>记录</span>
         </div>
-        <ul class="nav-menu">
-            <li class="nav-menu-item">
-                <div class="nav-menu-main" data-target="打卡记录-block">
-                    <div>
-                        <i class="fas fa-check-circle"></i> 打卡记录
-                    </div>
-                    <i class="fas fa-external-link-alt"></i>
-                </div>
-            </li>
-            <li class="nav-menu-item">
-                <div class="nav-menu-main" data-target="时间轴记录-block">
-                    <div>
-                        <i class="fas fa-clock"></i> 时间轴记录
-                    </div>
-                    <i class="fas fa-external-link-alt"></i>
-                </div>
-            </li>
-            <li class="nav-menu-item">
-                <div class="nav-menu-main calendar" data-section="calendar">
-                    <div>
-                        <i class="fas fa-calendar-alt"></i> 日历视图
-                    </div>
-                    <i class="fas fa-external-link-alt"></i>
-                </div>
-            </li>
-            <li class="nav-menu-item">
-                <div class="nav-menu-main" id="navReviewToggle">
-                    <div>
-                        <i class="fas fa-chart-bar"></i> 数据复盘
-                    </div>
-                    <i class="fas fa-external-link-alt"></i>
-                </div>
-            </li>
-            <li class="nav-menu-item">
-                <div class="nav-menu-main" onclick="openGitHubSyncPanel()">
-                    <div>
-                        <i class="fab fa-github"></i> GitHub同步
-                    </div>
-                    <i class="fas fa-external-link-alt"></i>
-                </div>
-            </li>
-        </ul>
-    </div>
+        <div class="nav-item" data-page="checkin">
+            <i class="fas fa-check-circle"></i>
+            <span>打卡</span>
+        </div>
+        <div class="nav-item" data-page="calendar">
+            <i class="fas fa-calendar-alt"></i>
+            <span>日历</span>
+        </div>
+        <div class="nav-item" data-page="analytics">
+            <i class="fas fa-chart-bar"></i>
+            <span>复盘</span>
+        </div>
+        <div class="nav-item" data-page="settings">
+            <i class="fas fa-cog"></i>
+            <span>设置</span>
+        </div>
+    </nav>
 
-    <!-- 导航按钮 -->
-    <button class="nav-toggle-button" id="navToggle">
-        <i class="fas fa-bars"></i>
-    </button>
-
-    <!-- 主头部 -->
-    <header>
-        <div class="container header-content">
-            <div class="logo">
-                <i class="fas fa-island-tropical"></i>
-                <div>
-                    <h1>小航小刀小岛</h1>
-                    <div class="datetime" id="currentDateTime">正在加载时间...</div>
-                </div>
+    <!-- 桌面端侧边栏 -->
+    <aside class="sidebar">
+        <div class="logo">
+            <h1>小航小刀小岛</h1>
+            <p class="subtitle">生活管理工具</p>
+            <div class="date-display" id="current-date"></div>
+        </div>
+        
+        <div class="user-profile">
+            <div class="avatar">
+                <i class="fas fa-users"></i>
             </div>
-            <button class="menu-button" id="reviewToggle">
+            <div class="user-info">
+                <h3>小航 & 小刀</h3>
+                <p>一起记录美好生活</p>
+            </div>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-link active" data-page="records">
+                <i class="fas fa-book"></i>
+                <span>生活记录</span>
+            </a>
+            <a href="#" class="nav-link" data-page="checkin">
+                <i class="fas fa-check-circle"></i>
+                <span>每日打卡</span>
+                <span class="badge" id="checkin-count">0</span>
+            </a>
+            <a href="#" class="nav-link" data-page="calendar">
+                <i class="fas fa-calendar-alt"></i>
+                <span>日历视图</span>
+            </a>
+            <a href="#" class="nav-link" data-page="analytics">
                 <i class="fas fa-chart-bar"></i>
+                <span>数据复盘</span>
+            </a>
+            <a href="#" class="nav-link" data-page="settings">
+                <i class="fas fa-cog"></i>
+                <span>设置与同步</span>
+            </a>
+        </nav>
+        
+        <div class="sidebar-footer">
+            <div class="sync-status">
+                <i class="fas fa-cloud" id="sync-icon"></i>
+                <span id="sync-status">未同步</span>
+            </div>
+            <button class="btn btn-small" id="quick-save">
+                <i class="fas fa-save"></i> 快速保存
             </button>
         </div>
-    </header>
+    </aside>
 
-    <div class="container">
-        <!-- 打卡记录板块 -->
-        <div class="section" id="打卡记录-block">
-            <h2 class="section-title"><i class="fas fa-check-circle"></i> 打卡记录</h2>
+    <!-- 主内容区域 -->
+    <main class="main-content">
+        <!-- 汉堡菜单按钮（移动端） -->
+        <button class="hamburger" id="hamburger">
+            <i class="fas fa-bars"></i>
+        </button>
+
+        <!-- 记录模块页面 -->
+        <section class="page active" id="records-page">
+            <div class="page-header">
+                <h2><i class="fas fa-book"></i> 生活记录</h2>
+                <p class="page-description">按时间轴记录一天的生活点滴</p>
+            </div>
             
-            <!-- 补剂打卡 -->
-            <div class="collapsible-block" id="补剂打卡-block">
-                <div class="block-header" onclick="toggleBlock('补剂打卡')">
+            <div class="timeline">
+                <!-- 睡眠复盘模块 -->
+                <div class="module-card" data-module="sleep">
+                    <div class="module-header">
+                        <h3><i class="fas fa-moon"></i> ① 睡眠复盘</h3>
+                        <button class="collapse-btn">
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                    </div>
+                    <div class="module-body">
+                        <form class="module-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="sleep-duration">睡眠时长（小时）</label>
+                                    <input type="number" id="sleep-duration" step="0.1" min="0" max="24" placeholder="如：7.5">
+                                </div>
+                                <div class="form-group">
+                                    <label for="sleep-quality">睡眠质量（1-100分）</label>
+                                    <input type="number" id="sleep-quality" min="1" max="100" placeholder="如：85">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="sleep-feeling">睡眠感受</label>
+                                <textarea id="sleep-feeling" rows="2" placeholder="记录昨晚的睡眠感受..."></textarea>
+                            </div>
+                            <button type="button" class="btn btn-save" data-module="sleep">
+                                <i class="fas fa-save"></i> 暂时保存
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- 早餐记录模块 -->
+                <div class="module-card" data-module="breakfast">
+                    <div class="module-header">
+                        <h3><i class="fas fa-coffee"></i> ② 早餐记录</h3>
+                        <button class="collapse-btn">
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                    </div>
+                    <div class="module-body">
+                        <form class="module-form">
+                            <div class="form-group">
+                                <label for="breakfast-content">早餐内容</label>
+                                <input type="text" id="breakfast-content" placeholder="如：牛奶、面包、鸡蛋">
+                            </div>
+                            <div class="form-group">
+                                <label for="breakfast-feeling">早餐感受</label>
+                                <textarea id="breakfast-feeling" rows="2" placeholder="早餐感受如何？"></textarea>
+                            </div>
+                            <button type="button" class="btn btn-save" data-module="breakfast">
+                                <i class="fas fa-save"></i> 暂时保存
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- 工作看板模块 -->
+                <div class="module-card" data-module="work">
+                    <div class="module-header">
+                        <h3><i class="fas fa-tasks"></i> ③ 工作看板</h3>
+                        <button class="collapse-btn">
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                    </div>
+                    <div class="module-body">
+                        <form class="module-form">
+                            <div class="form-group">
+                                <div class="work-board">
+                                    <div class="work-header">
+                                        <div class="work-col">TODO待办事项</div>
+                                        <div class="work-col">完成情况</div>
+                                        <div class="work-col-action">操作</div>
+                                    </div>
+                                    <div class="work-rows" id="work-rows-container">
+                                        <!-- 动态添加的行会在这里 -->
+                                        <div class="work-row">
+                                            <div class="work-col">
+                                                <input type="text" class="work-todo" placeholder="请输入待办事项">
+                                            </div>
+                                            <div class="work-col">
+                                                <input type="text" class="work-done" placeholder="完成情况">
+                                            </div>
+                                            <div class="work-col-action">
+                                                <button type="button" class="btn-icon btn-remove-row" title="删除此行">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn btn-add-row" id="add-work-row">
+                                        <i class="fas fa-plus"></i> 添加任务
+                                    </button>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-save" data-module="work">
+                                <i class="fas fa-save"></i> 暂时保存
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- 家务记录模块 -->
+                <div class="module-card" data-module="chores">
+                    <div class="module-header">
+                        <h3><i class="fas fa-home"></i> ④ 家务记录</h3>
+                        <button class="collapse-btn">
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                    </div>
+                    <div class="module-body">
+                        <form class="module-form">
+                            <div class="chores-grid">
+                                <div class="chores-item">
+                                    <input type="checkbox" id="chore-trash" value="丢垃圾">
+                                    <label for="chore-trash">丢垃圾</label>
+                                </div>
+                                <div class="chores-item">
+                                    <input type="checkbox" id="chore-cooking" value="做饭">
+                                    <label for="chore-cooking">做饭</label>
+                                </div>
+                                <div class="chores-item">
+                                    <input type="checkbox" id="chore-kitchen" value="收拾厨房">
+                                    <label for="chore-kitchen">收拾厨房</label>
+                                </div>
+                                <div class="chores-item">
+                                    <input type="checkbox" id="chore-laundry" value="洗衣服">
+                                    <label for="chore-laundry">洗衣服</label>
+                                </div>
+                                <div class="chores-item">
+                                    <input type="checkbox" id="chore-hang" value="晾衣服">
+                                    <label for="chore-hang">晾衣服</label>
+                                </div>
+                                <div class="chores-item">
+                                    <input type="checkbox" id="chore-fold" value="叠衣服">
+                                    <label for="chore-fold">叠衣服</label>
+                                </div>
+                                <div class="chores-item">
+                                    <input type="checkbox" id="chore-desk" value="收拾桌子">
+                                    <label for="chore-desk">收拾桌子</label>
+                                </div>
+                                <div class="chores-item">
+                                    <input type="checkbox" id="chore-bed" value="收拾床铺">
+                                    <label for="chore-bed">收拾床铺</label>
+                                </div>
+                                <div class="chores-item">
+                                    <input type="checkbox" id="chore-fridge" value="清理冰箱">
+                                    <label for="chore-fridge">清理冰箱</label>
+                                </div>
+                                <div class="chores-item">
+                                    <input type="checkbox" id="chore-floor" value="清理地面">
+                                    <label for="chore-floor">清理地面</label>
+                                </div>
+                            </div>
+                            <div class="chores-score">
+                                <span>家务得分：</span>
+                                <strong id="chores-total-score">0</strong> 分
+                            </div>
+                            <button type="button" class="btn btn-save" data-module="chores">
+                                <i class="fas fa-save"></i> 暂时保存
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- 学习记录模块 -->
+                <div class="module-card" data-module="study">
+                    <div class="module-header">
+                        <h3><i class="fas fa-graduation-cap"></i> ⑤ 学习记录</h3>
+                        <button class="collapse-btn">
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                    </div>
+                    <div class="module-body">
+                        <form class="module-form">
+                            <div class="form-group">
+                                <div class="study-rows" id="study-rows-container">
+                                    <div class="study-row">
+                                        <div class="study-col">
+                                            <label>科目选择</label>
+                                            <select class="study-subject">
+                                                <option value="逻辑">逻辑</option>
+                                                <option value="数学">数学</option>
+                                                <option value="英语">英语</option>
+                                                <option value="写作">写作</option>
+                                                <option value="其他">其他</option>
+                                            </select>
+                                        </div>
+                                        <div class="study-col">
+                                            <label>学习时长（小时）</label>
+                                            <input type="number" class="study-duration" step="0.1" min="0" placeholder="时长">
+                                        </div>
+                                        <div class="study-col">
+                                            <label>学习内容</label>
+                                            <input type="text" class="study-content" placeholder="学习内容">
+                                        </div>
+                                        <div class="study-col">
+                                            <label>学习总结</label>
+                                            <input type="text" class="study-summary" placeholder="学习总结">
+                                        </div>
+                                        <div class="study-col-action">
+                                            <button type="button" class="btn-icon btn-remove-study-row" title="删除此行">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn btn-add-row" id="add-study-row">
+                                    <i class="fas fa-plus"></i> 添加学习记录
+                                </button>
+                            </div>
+                            <button type="button" class="btn btn-save" data-module="study">
+                                <i class="fas fa-save"></i> 暂时保存
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- 午餐记录模块 -->
+                <div class="module-card" data-module="lunch">
+                    <div class="module-header">
+                        <h3><i class="fas fa-utensils"></i> ⑥ 午餐记录</h3>
+                        <button class="collapse-btn">
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                    </div>
+                    <div class="module-body">
+                        <form class="module-form">
+                            <div class="form-group">
+                                <label for="lunch-content">午餐内容</label>
+                                <input type="text" id="lunch-content" placeholder="如：米饭、青菜、鸡肉">
+                            </div>
+                            <div class="form-group">
+                                <label for="lunch-feeling">午餐感受</label>
+                                <textarea id="lunch-feeling" rows="2" placeholder="午餐感受如何？"></textarea>
+                            </div>
+                            <button type="button" class="btn btn-save" data-module="lunch">
+                                <i class="fas fa-save"></i> 暂时保存
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- 午休记录模块 -->
+                <div class="module-card" data-module="nap">
+                    <div class="module-header">
+                        <h3><i class="fas fa-bed"></i> ⑦ 午休记录</h3>
+                        <button class="collapse-btn">
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                    </div>
+                    <div class="module-body">
+                        <form class="module-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="nap-duration">午休时长（小时）</label>
+                                    <input type="number" id="nap-duration" step="0.1" min="0" max="4" placeholder="如：0.5">
+                                </div>
+                                <div class="form-group">
+                                    <label for="nap-quality">午休质量（1-100分）</label>
+                                    <input type="number" id="nap-quality" min="1" max="100" placeholder="如：75">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="nap-feeling">午休感受</label>
+                                <textarea id="nap-feeling" rows="2" placeholder="记录午休感受..."></textarea>
+                            </div>
+                            <button type="button" class="btn btn-save" data-module="nap">
+                                <i class="fas fa-save"></i> 暂时保存
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- 晚餐记录模块 -->
+                <div class="module-card" data-module="dinner">
+                    <div class="module-header">
+                        <h3><i class="fas fa-drumstick-bite"></i> ⑧ 晚餐记录</h3>
+                        <button class="collapse-btn">
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                    </div>
+                    <div class="module-body">
+                        <form class="module-form">
+                            <div class="form-group">
+                                <label for="dinner-content">晚餐内容</label>
+                                <input type="text" id="dinner-content" placeholder="如：面条、蔬菜、鱼肉">
+                            </div>
+                            <div class="form-group">
+                                <label for="dinner-feeling">晚餐感受</label>
+                                <textarea id="dinner-feeling" rows="2" placeholder="晚餐感受如何？"></textarea>
+                            </div>
+                            <button type="button" class="btn btn-save" data-module="dinner">
+                                <i class="fas fa-save"></i> 暂时保存
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- 运动记录模块 -->
+                <div class="module-card" data-module="exercise">
+                    <div class="module-header">
+                        <h3><i class="fas fa-running"></i> ⑨ 运动记录</h3>
+                        <button class="collapse-btn">
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                    </div>
+                    <div class="module-body">
+                        <form class="module-form">
+                            <div class="form-group">
+                                <div class="exercise-rows" id="exercise-rows-container">
+                                    <div class="exercise-row">
+                                        <div class="exercise-col">
+                                            <label>运动类型</label>
+                                            <select class="exercise-type">
+                                                <option value="有氧">有氧</option>
+                                                <option value="无氧">无氧</option>
+                                                <option value="力量">力量</option>
+                                                <option value="拉伸">拉伸</option>
+                                                <option value="舞力全开">舞力全开</option>
+                                            </select>
+                                        </div>
+                                        <div class="exercise-col">
+                                            <label>运动时长（小时）</label>
+                                            <input type="number" class="exercise-duration" step="0.1" min="0" placeholder="时长">
+                                        </div>
+                                        <div class="exercise-col">
+                                            <label>消耗热量（千卡）</label>
+                                            <input type="number" class="exercise-calories" min="0" placeholder="热量">
+                                        </div>
+                                        <div class="exercise-col">
+                                            <label>运动感受</label>
+                                            <input type="text" class="exercise-feeling" placeholder="运动感受">
+                                        </div>
+                                        <div class="exercise-col-action">
+                                            <button type="button" class="btn-icon btn-remove-exercise-row" title="删除此行">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn btn-add-row" id="add-exercise-row">
+                                    <i class="fas fa-plus"></i> 添加运动记录
+                                </button>
+                            </div>
+                            <button type="button" class="btn btn-save" data-module="exercise">
+                                <i class="fas fa-save"></i> 暂时保存
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- 游戏记录模块 -->
+                <div class="module-card" data-module="game">
+                    <div class="module-header">
+                        <h3><i class="fas fa-gamepad"></i> ⑩ 游戏记录</h3>
+                        <button class="collapse-btn">
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                    </div>
+                    <div class="module-body">
+                        <form class="module-form">
+                            <div class="form-group">
+                                <label for="game-name">游戏名称</label>
+                                <input type="text" id="game-name" placeholder="如：动物森友会">
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="game-duration">游戏时长（小时）</label>
+                                    <input type="number" id="game-duration" step="0.1" min="0" placeholder="如：1.5">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="game-feeling">游戏感受</label>
+                                <textarea id="game-feeling" rows="2" placeholder="记录游戏感受..."></textarea>
+                            </div>
+                            <button type="button" class="btn btn-save" data-module="game">
+                                <i class="fas fa-save"></i> 暂时保存
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- 娱乐记录模块 -->
+                <div class="module-card" data-module="entertainment">
+                    <div class="module-header">
+                        <h3><i class="fas fa-film"></i> ⑪ 娱乐记录</h3>
+                        <button class="collapse-btn">
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                    </div>
+                    <div class="module-body">
+                        <form class="module-form">
+                            <div class="form-group">
+                                <div class="entertainment-rows" id="entertainment-rows-container">
+                                    <div class="entertainment-row">
+                                        <div class="entertainment-col">
+                                            <label>娱乐类型</label>
+                                            <select class="entertainment-type">
+                                                <option value="动画">动画</option>
+                                                <option value="电影">电影</option>
+                                                <option value="拼豆">拼豆</option>
+                                                <option value="美甲">美甲</option>
+                                                <option value="其他">其他</option>
+                                            </select>
+                                        </div>
+                                        <div class="entertainment-col">
+                                            <label>娱乐时长（小时）</label>
+                                            <input type="number" class="entertainment-duration" step="0.1" min="0" placeholder="时长">
+                                        </div>
+                                        <div class="entertainment-col">
+                                            <label>娱乐感受</label>
+                                            <input type="text" class="entertainment-feeling" placeholder="娱乐感受">
+                                        </div>
+                                        <div class="entertainment-col-action">
+                                            <button type="button" class="btn-icon btn-remove-entertainment-row" title="删除此行">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn btn-add-row" id="add-entertainment-row">
+                                    <i class="fas fa-plus"></i> 添加娱乐记录
+                                </button>
+                            </div>
+                            <button type="button" class="btn btn-save" data-module="entertainment">
+                                <i class="fas fa-save"></i> 暂时保存
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- 财务记账模块 -->
+                <div class="module-card" data-module="finance">
+                    <div class="module-header">
+                        <h3><i class="fas fa-wallet"></i> ⑫ 财务记账</h3>
+                        <button class="collapse-btn">
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                    </div>
+                    <div class="module-body">
+                        <form class="module-form">
+                            <div class="finance-container">
+                                <div class="finance-section">
+                                    <h4><i class="fas fa-money-bill-wave"></i> 收入记录</h4>
+                                    <div class="finance-rows" id="income-rows-container">
+                                        <div class="finance-row income-row">
+                                            <div class="finance-col">
+                                                <select class="income-category">
+                                                    <option value="工资">工资</option>
+                                                    <option value="兼职">兼职</option>
+                                                    <option value="礼物">礼物</option>
+                                                    <option value="其他">其他</option>
+                                                </select>
+                                            </div>
+                                            <div class="finance-col">
+                                                <input type="number" class="income-amount" min="0" placeholder="金额">
+                                            </div>
+                                            <div class="finance-col">
+                                                <input type="text" class="income-description" placeholder="描述">
+                                            </div>
+                                            <div class="finance-col-action">
+                                                <button type="button" class="btn-icon btn-remove-income-row" title="删除此行">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn btn-add-row" id="add-income-row">
+                                        <i class="fas fa-plus"></i> 添加收入
+                                    </button>
+                                </div>
+                                
+                                <div class="finance-section">
+                                    <h4><i class="fas fa-shopping-cart"></i> 支出记录</h4>
+                                    <div class="finance-rows" id="expense-rows-container">
+                                        <div class="finance-row expense-row">
+                                            <div class="finance-col">
+                                                <select class="expense-category">
+                                                    <option value="餐饮">餐饮</option>
+                                                    <option value="购物">购物</option>
+                                                    <option value="娱乐">娱乐</option>
+                                                    <option value="交通">交通</option>
+                                                    <option value="其他">其他</option>
+                                                </select>
+                                            </div>
+                                            <div class="finance-col">
+                                                <input type="number" class="expense-amount" min="0" placeholder="金额">
+                                            </div>
+                                            <div class="finance-col">
+                                                <input type="text" class="expense-description" placeholder="描述">
+                                            </div>
+                                            <div class="finance-col-action">
+                                                <button type="button" class="btn-icon btn-remove-expense-row" title="删除此行">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn btn-add-row" id="add-expense-row">
+                                        <i class="fas fa-plus"></i> 添加支出
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="finance-summary">
+                                <div class="summary-item">
+                                    <span>总收入：</span>
+                                    <strong id="total-income">0</strong> 元
+                                </div>
+                                <div class="summary-item">
+                                    <span>总支出：</span>
+                                    <strong id="total-expense">0</strong> 元
+                                </div>
+                                <div class="summary-item">
+                                    <span>净收入：</span>
+                                    <strong id="net-income">0</strong> 元
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-save" data-module="finance">
+                                <i class="fas fa-save"></i> 暂时保存
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 打卡页面 -->
+        <section class="page" id="checkin-page">
+            <div class="page-header">
+                <h2><i class="fas fa-check-circle"></i> 每日打卡</h2>
+                <p class="page-description">完成每日打卡任务</p>
+            </div>
+            
+            <div class="checkin-sections">
+                <!-- 补剂打卡 -->
+                <div class="checkin-section">
                     <h3><i class="fas fa-pills"></i> 补剂打卡</h3>
-                    <button class="block-toggle">
-                        <i class="fas fa-chevron-down"></i>
-                    </button>
-                </div>
-                <div class="block-content" id="补剂打卡-content">
-                    <div class="form-group">
-                        <div class="checkbox-group large-checkbox">
-                            <label class="checkbox-item large">
-                                <input type="checkbox" id="ironSupplement">
-                                <span class="checkmark"></span>
+                    <div class="checkin-grid">
+                        <div class="checkin-item">
+                            <input type="checkbox" id="supplement-iron">
+                            <label for="supplement-iron">
                                 <i class="fas fa-capsules"></i>
-                                <span class="checkbox-label">补铁片</span>
+                                <span>补铁片</span>
                             </label>
-                            <label class="checkbox-item large">
-                                <input type="checkbox" id="vitaminDK">
-                                <span class="checkmark"></span>
+                        </div>
+                        <div class="checkin-item">
+                            <input type="checkbox" id="supplement-d3k2">
+                            <label for="supplement-d3k2">
                                 <i class="fas fa-capsules"></i>
-                                <span class="checkbox-label">维生素D3+K2</span>
+                                <span>维生素D3+K2</span>
                             </label>
-                            <label class="checkbox-item large">
-                                <input type="checkbox" id="magnesiumSupplement">
-                                <span class="checkmark"></span>
+                        </div>
+                        <div class="checkin-item">
+                            <input type="checkbox" id="supplement-magnesium">
+                            <label for="supplement-magnesium">
                                 <i class="fas fa-capsules"></i>
-                                <span class="checkbox-label">补镁片</span>
+                                <span>补镁片</span>
                             </label>
                         </div>
                     </div>
-                    <button class="save-btn" onclick="saveSupplements()">
-                        <i class="fas fa-save"></i> 保存补剂打卡
-                    </button>
                 </div>
-            </div>
-
-            <!-- 护理打卡 -->
-            <div class="collapsible-block" id="护理打卡-block">
-                <div class="block-header" onclick="toggleBlock('护理打卡')">
+                
+                <!-- 护理打卡 -->
+                <div class="checkin-section">
                     <h3><i class="fas fa-spa"></i> 护理打卡</h3>
-                    <button class="block-toggle">
-                        <i class="fas fa-chevron-down"></i>
-                    </button>
-                </div>
-                <div class="block-content" id="护理打卡-content">
-                    <div class="form-group">
-                        <div class="checkbox-group large-checkbox">
-                            <label class="checkbox-item large">
-                                <input type="checkbox" id="bodyScrub">
-                                <span class="checkmark"></span>
-                                <i class="fas fa-jar"></i>
-                                <span class="checkbox-label">磨砂膏</span>
+                    <div class="checkin-grid">
+                        <div class="checkin-item">
+                            <input type="checkbox" id="care-scrub">
+                            <label for="care-scrub">
+                                <i class="fas fa-hand-sparkles"></i>
+                                <span>磨砂膏</span>
                             </label>
-                            <label class="checkbox-item large">
-                                <input type="checkbox" id="hairRemoval">
-                                <span class="checkmark"></span>
-                                <i class="fas fa-wind"></i>
-                                <span class="checkbox-label">脱毛</span>
+                        </div>
+                        <div class="checkin-item">
+                            <input type="checkbox" id="care-hair-removal">
+                            <label for="care-hair-removal">
+                                <i class="fas fa-cut"></i>
+                                <span>脱毛</span>
                             </label>
-                            <label class="checkbox-item large">
-                                <input type="checkbox" id="bodyLotion">
-                                <span class="checkmark"></span>
-                                <i class="fas fa-pump-soap"></i>
-                                <span class="checkbox-label">身体乳</span>
+                        </div>
+                        <div class="checkin-item">
+                            <input type="checkbox" id="care-lotion">
+                            <label for="care-lotion">
+                                <i class="fas fa-hand-holding-heart"></i>
+                                <span>身体乳</span>
                             </label>
                         </div>
                     </div>
-                    <button class="save-btn" onclick="saveBodyCare()">
-                        <i class="fas fa-save"></i> 保存护理打卡
-                    </button>
                 </div>
+                
+                <!-- 动森打卡 -->
+                <div class="checkin-section animal-crossing-section">
+                    <div class="ac-header">
+                        <h3><i class="fas fa-leaf"></i> 动森打卡</h3>
+                        <div class="version-switcher">
+                            <div class="version-option">
+                                <input type="radio" id="version-island" name="ac-version" value="小航小刀小岛" checked>
+                                <label for="version-island">小航小刀小岛</label>
+                            </div>
+                            <div class="version-option">
+                                <input type="radio" id="version-double" name="ac-version" value="刀刀航航岛岛">
+                                <label for="version-double">刀刀航航岛岛</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="ac-npc-grid" id="ac-npc-container">
+                        <!-- NPC卡片会动态生成 -->
+                    </div>
+                    
+                    <div class="ac-summary">
+                        <div class="summary-item">
+                            <span>打招呼完成：</span>
+                            <strong id="greeting-count">0</strong>/10
+                        </div>
+                        <div class="summary-item">
+                            <span>送礼物完成：</span>
+                            <strong id="gift-count">0</strong>/10
+                        </div>
+                        <div class="summary-item">
+                            <span>总完成率：</span>
+                            <strong id="ac-completion">0%</strong>
+                        </div>
+                    </div>
+                </div>
+                
+                <button type="button" class="btn btn-primary btn-save-checkin">
+                    <i class="fas fa-save"></i> 保存打卡状态
+                </button>
             </div>
-        </div>
+        </section>
 
-        <!-- 时间轴记录板块 -->
-        <div class="section active" id="时间轴记录-block">
-            <h2 class="section-title"><i class="fas fa-clock"></i> 时间轴记录</h2>
+        <!-- 日历页面 -->
+        <section class="page" id="calendar-page">
+            <div class="page-header">
+                <h2><i class="fas fa-calendar-alt"></i> 日历视图</h2>
+                <p class="page-description">查看历史记录和重要日期</p>
+            </div>
             
-            <!-- 睡眠复盘 -->
-            <div class="collapsible-block" id="睡眠复盘-block">
-                <div class="block-header" onclick="toggleBlock('睡眠复盘')">
-                    <h3><i class="fas fa-bed"></i> 睡眠复盘</h3>
-                    <button class="block-toggle">
-                        <i class="fas fa-chevron-down"></i>
-                    </button>
-                </div>
-                <div class="block-content" id="睡眠复盘-content">
-                    <div class="form-group">
-                        <div class="form-row">
-                            <div class="form-column">
-                                <label for="sleepDuration">睡眠时长 (小时)</label>
-                                <input type="number" id="sleepDuration" min="0" max="24" step="0.5" placeholder="例如: 7.5">
-                            </div>
-                            <div class="form-column">
-                                <label for="sleepQuality">睡眠质量 (1-10分)</label>
-                                <input type="number" id="sleepQuality" min="1" max="10" placeholder="例如: 8">
-                            </div>
-                        </div>
-                        <div class="form-column">
-                            <label for="sleepFeeling">睡眠感受</label>
-                            <textarea id="sleepFeeling" placeholder="记录昨晚的睡眠感受..." rows="2"></textarea>
-                        </div>
-                    </div>
-                    <button class="save-btn" onclick="saveSleep()">
-                        <i class="fas fa-save"></i> 暂时保存
-                    </button>
-                </div>
-            </div>
-
-            <!-- 早餐记录 -->
-            <div class="collapsible-block" id="早餐记录-block">
-                <div class="block-header" onclick="toggleBlock('早餐记录')">
-                    <h3><i class="fas fa-coffee"></i> 早餐记录</h3>
-                    <button class="block-toggle">
-                        <i class="fas fa-chevron-down"></i>
-                    </button>
-                </div>
-                <div class="block-content" id="早餐记录-content">
-                    <div class="form-group">
-                        <div class="form-column">
-                            <label for="breakfastContent">早餐内容</label>
-                            <textarea id="breakfastContent" placeholder="今天早餐吃了什么..." rows="2"></textarea>
-                        </div>
-                        <div class="form-column">
-                            <label for="breakfastFeeling">早餐感受</label>
-                            <textarea id="breakfastFeeling" placeholder="早餐后的感受..." rows="2"></textarea>
-                        </div>
-                    </div>
-                    <button class="save-btn" onclick="saveBreakfast()">
-                        <i class="fas fa-save"></i> 暂时保存
-                    </button>
-                </div>
-            </div>
-
-            <!-- 工作看板 -->
-            <div class="collapsible-block" id="工作看板-block">
-                <div class="block-header" onclick="toggleBlock('工作看板')">
-                    <h3><i class="fas fa-tasks"></i> 工作看板</h3>
-                    <button class="block-toggle">
-                        <i class="fas fa-chevron-down"></i>
-                    </button>
-                </div>
-                <div class="block-content" id="工作看板-content">
-                    <div class="form-group">
-                        <div class="work-board">
-                            <div class="work-column">
-                                <label>待办事项 (Todo)</label>
-                                <div id="todoItems">
-                                    <div class="work-item">
-                                        <div class="item-number">1</div>
-                                        <input type="text" class="todo-item" placeholder="待办事项..." data-index="0">
-                                    </div>
-                                </div>
-                                <button class="add-work-item" onclick="addTodoItem()">
-                                    <i class="fas fa-plus"></i> 添加待办事项
-                                </button>
-                            </div>
-                            <div class="work-column">
-                                <label>已完成事项 (Done)</label>
-                                <div id="doneItems">
-                                    <div class="work-item">
-                                        <div class="item-number">1</div>
-                                        <input type="text" class="done-item" placeholder="已完成事项..." data-index="0">
-                                    </div>
-                                </div>
-                                <button class="add-work-item" onclick="addDoneItem()">
-                                    <i class="fas fa-plus"></i> 添加完成事项
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <button class="save-btn" onclick="saveWork()">
-                        <i class="fas fa-save"></i> 暂时保存
-                    </button>
-                </div>
-            </div>
-
-            <!-- 家务记录 -->
-            <div class="collapsible-block" id="家务记录-block">
-                <div class="block-header" onclick="toggleBlock('家务记录')">
-                    <h3><i class="fas fa-broom"></i> 家务记录</h3>
-                    <button class="block-toggle">
-                        <i class="fas fa-chevron-down"></i>
-                    </button>
-                </div>
-                <div class="block-content" id="家务记录-content">
-                    <div class="form-group">
-                        <div class="checkbox-group">
-                            <label class="checkbox-item">
-                                <input type="checkbox" id="houseworkGarbage"> 丢垃圾
-                            </label>
-                            <label class="checkbox-item">
-                                <input type="checkbox" id="houseworkCooking"> 做饭
-                            </label>
-                            <label class="checkbox-item">
-                                <input type="checkbox" id="houseworkLaundry"> 洗衣服
-                            </label>
-                            <label class="checkbox-item">
-                                <input type="checkbox" id="houseworkHangingClothes"> 晾衣服
-                            </label>
-                            <label class="checkbox-item">
-                                <input type="checkbox" id="houseworkFoldingClothes"> 叠衣服
-                            </label>
-                            <label class="checkbox-item">
-                                <input type="checkbox" id="houseworkCleaningKitchen"> 收拾厨房
-                            </label>
-                            <label class="checkbox-item">
-                                <input type="checkbox" id="houseworkCleaningTable"> 收拾桌子
-                            </label>
-                            <label class="checkbox-item">
-                                <input type="checkbox" id="houseworkCleaningBed"> 收拾床铺
-                            </label>
-                            <label class="checkbox-item">
-                                <input type="checkbox" id="houseworkCleaningFridge"> 清理冰箱
-                            </label>
-                        </div>
-                        <div class="form-column">
-                            <label for="houseworkFeeling">家务感受</label>
-                            <textarea id="houseworkFeeling" placeholder="今天做家务的感受..." rows="2"></textarea>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-column">
-                                <label>今日家务积分</label>
-                                <input type="text" id="houseworkScore" value="0" readonly style="background-color: #F5F5F5;">
-                            </div>
-                        </div>
-                    </div>
-                    <button class="save-btn" onclick="saveHousework()">
-                        <i class="fas fa-save"></i> 暂时保存
-                    </button>
-                </div>
-            </div>
-
-            <!-- 学习记录 -->
-            <div class="collapsible-block" id="学习记录-block">
-                <div class="block-header" onclick="toggleBlock('学习记录')">
-                    <h3><i class="fas fa-graduation-cap"></i> 学习记录</h3>
-                    <button class="block-toggle">
-                        <i class="fas fa-chevron-down"></i>
-                    </button>
-                </div>
-                <div class="block-content" id="学习记录-content">
-                    <div class="form-group">
-                        <div class="form-row">
-                            <div class="form-column">
-                                <label for="studySubject">科目选择</label>
-                                <select id="studySubject">
-                                    <option value="数学">数学</option>
-                                    <option value="逻辑">逻辑</option>
-                                    <option value="写作">写作</option>
-                                    <option value="英语">英语</option>
-                                    <option value="其他">其他</option>
-                                </select>
-                            </div>
-                            <div class="form-column">
-                                <label for="studyDuration">学习时长 (分钟)</label>
-                                <input type="number" id="studyDuration" min="0" max="600" placeholder="例如: 120">
-                            </div>
-                        </div>
-                        <div class="form-column">
-                            <label for="studyContent">学习内容</label>
-                            <textarea id="studyContent" placeholder="今天学习了什么..." rows="2"></textarea>
-                        </div>
-                        <div class="form-column">
-                            <label for="studySummary">学习总结</label>
-                            <textarea id="studySummary" placeholder="学习总结和感受..." rows="2"></textarea>
-                        </div>
-                    </div>
-                    <button class="save-btn" onclick="saveStudy()">
-                        <i class="fas fa-save"></i> 暂时保存
-                    </button>
-                </div>
-            </div>
-
-            <!-- 午餐记录 -->
-            <div class="collapsible-block" id="午餐记录-block">
-                <div class="block-header" onclick="toggleBlock('午餐记录')">
-                    <h3><i class="fas fa-utensils"></i> 午餐记录</h3>
-                    <button class="block-toggle">
-                        <i class="fas fa-chevron-down"></i>
-                    </button>
-                </div>
-                <div class="block-content" id="午餐记录-content">
-                    <div class="form-group">
-                        <div class="form-column">
-                            <label for="lunchContent">午餐内容</label>
-                            <textarea id="lunchContent" placeholder="今天午餐吃了什么..." rows="2"></textarea>
-                        </div>
-                        <div class="form-column">
-                            <label for="lunchFeeling">午餐感受</label>
-                            <textarea id="lunchFeeling" placeholder="午餐后的感受..." rows="2"></textarea>
-                        </div>
-                    </div>
-                    <button class="save-btn" onclick="saveLunch()">
-                        <i class="fas fa-save"></i> 暂时保存
-                    </button>
-                </div>
-            </div>
-
-            <!-- 午休记录 -->
-            <div class="collapsible-block" id="午休记录-block">
-                <div class="block-header" onclick="toggleBlock('午休记录')">
-                    <h3><i class="fas fa-couch"></i> 午休记录</h3>
-                    <button class="block-toggle">
-                        <i class="fas fa-chevron-down"></i>
-                    </button>
-                </div>
-                <div class="block-content" id="午休记录-content">
-                    <div class="form-group">
-                        <div class="form-row">
-                            <div class="form-column">
-                                <label for="napDuration">午休时长 (分钟)</label>
-                                <input type="number" id="napDuration" min="0" max="180" placeholder="例如: 30">
-                            </div>
-                            <div class="form-column">
-                                <label for="napQuality">午休质量 (1-10分)</label>
-                                <input type="number" id="napQuality" min="1" max="10" placeholder="例如: 7">
-                            </div>
-                        </div>
-                        <div class="form-column">
-                            <label for="napFeeling">午休感受</label>
-                            <textarea id="napFeeling" placeholder="午休后的感受..." rows="2"></textarea>
-                        </div>
-                    </div>
-                    <button class="save-btn" onclick="saveNap()">
-                        <i class="fas fa-save"></i> 暂时保存
-                    </button>
-                </div>
-            </div>
-
-            <!-- 运动记录 -->
-            <div class="collapsible-block" id="运动记录-block">
-                <div class="block-header" onclick="toggleBlock('运动记录')">
-                    <h3><i class="fas fa-running"></i> 运动记录</h3>
-                    <button class="block-toggle">
-                        <i class="fas fa-chevron-down"></i>
-                    </button>
-                </div>
-                <div class="block-content" id="运动记录-content">
-                    <div class="form-group">
-                        <div class="form-row">
-                            <div class="form-column">
-                                <label for="exerciseType">运动类型</label>
-                                <select id="exerciseType">
-                                    <option value="有氧">有氧</option>
-                                    <option value="无氧">无氧</option>
-                                    <option value="力量训练">力量训练</option>
-                                    <option value="舞力全开">舞力全开</option>
-                                    <option value="拉伸">拉伸</option>
-                                    <option value="其他">其他</option>
-                                </select>
-                            </div>
-                            <div class="form-column">
-                                <label for="exerciseDuration">运动时长 (分钟)</label>
-                                <input type="number" id="exerciseDuration" min="0" max="300" placeholder="例如: 60">
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-column">
-                                <label for="exerciseItem">运动项目</label>
-                                <input type="text" id="exerciseItem" placeholder="例如: 跑步、瑜伽等">
-                            </div>
-                            <div class="form-column">
-                                <label for="exerciseCalories">消耗热量 (千卡)</label>
-                                <input type="number" id="exerciseCalories" min="0" placeholder="例如: 300">
-                            </div>
-                        </div>
-                        <div class="form-column">
-                            <label for="exerciseFeeling">运动感受</label>
-                            <textarea id="exerciseFeeling" placeholder="运动后的感受..." rows="2"></textarea>
-                        </div>
-                    </div>
-                    <button class="save-btn" onclick="saveExercise()">
-                        <i class="fas fa-save"></i> 暂时保存
-                    </button>
-                </div>
-            </div>
-
-            <!-- 晚餐记录 -->
-            <div class="collapsible-block" id="晚餐记录-block">
-                <div class="block-header" onclick="toggleBlock('晚餐记录')">
-                    <h3><i class="fas fa-dinner"></i> 晚餐记录</h3>
-                    <button class="block-toggle">
-                        <i class="fas fa-chevron-down"></i>
-                    </button>
-                </div>
-                <div class="block-content" id="晚餐记录-content">
-                    <div class="form-group">
-                        <div class="form-column">
-                            <label for="dinnerContent">晚餐内容</label>
-                            <textarea id="dinnerContent" placeholder="今天晚餐吃了什么..." rows="2"></textarea>
-                        </div>
-                        <div class="form-column">
-                            <label for="dinnerFeeling">晚餐感受</label>
-                            <textarea id="dinnerFeeling" placeholder="晚餐后的感受..." rows="2"></textarea>
-                        </div>
-                    </div>
-                    <button class="save-btn" onclick="saveDinner()">
-                        <i class="fas fa-save"></i> 暂时保存
-                    </button>
-                </div>
-            </div>
-
-            <!-- 游戏记录 -->
-            <div class="collapsible-block" id="游戏记录-block">
-                <div class="block-header" onclick="toggleBlock('游戏记录')">
-                    <h3><i class="fas fa-gamepad"></i> 游戏记录</h3>
-                    <button class="block-toggle">
-                        <i class="fas fa-chevron-down"></i>
-                    </button>
-                </div>
-                <div class="block-content" id="游戏记录-content">
-                    <div class="form-group">
-                        <div class="form-row">
-                            <div class="form-column">
-                                <label for="gameType">游戏类型</label>
-                                <select id="gameType">
-                                    <option value="通用游戏">通用游戏</option>
-                                    <option value="动物森友会">动物森友会</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div id="generalGame" class="game-section">
-                            <div class="form-row">
-                                <div class="form-column">
-                                    <label for="gameName">游戏名称</label>
-                                    <input type="text" id="gameName" placeholder="游戏名称">
-                                </div>
-                                <div class="form-column">
-                                    <label for="gameProgress">游戏进度</label>
-                                    <input type="text" id="gameProgress" placeholder="游戏进度描述">
-                                </div>
-                            </div>
-                            <div class="form-column">
-                                <label for="gameFeeling">游戏感受</label>
-                                <textarea id="gameFeeling" placeholder="今天的游戏感受..." rows="2"></textarea>
-                            </div>
-                        </div>
-                        <div id="animalCrossing" class="game-section" style="display:none;">
-                            <div class="form-row">
-                                <div class="form-column">
-                                    <label for="acWeather">天气选择</label>
-                                    <select id="acWeather">
-                                        <option value="晴朗">晴朗</option>
-                                        <option value="多云">多云</option>
-                                        <option value="雨天">雨天</option>
-                                        <option value="雪天">雪天</option>
-                                    </select>
-                                </div>
-                                <div class="form-column">
-                                    <label for="acNPC">NPC来访 (单选)</label>
-                                    <select id="acNPC">
-                                        <option value="">请选择NPC</option>
-                                        <option value="龙克斯">龙克斯</option>
-                                        <option value="幽幽">幽幽</option>
-                                        <option value="薛革">薛革</option>
-                                        <option value="狐利">狐利</option>
-                                        <option value="骆岚">骆岚</option>
-                                        <option value="俞司廷">俞司廷</option>
-                                        <option value="曹珂">曹珂</option>
-                                        <option value="绵儿">绵儿</option>
-                                        <option value="巴猎">巴猎</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-column">
-                                <label for="acEvent">事件描述</label>
-                                <textarea id="acEvent" placeholder="今天在岛上发生了什么..." rows="2"></textarea>
-                            </div>
-                            <div class="form-column">
-                                <label for="acFeeling">游戏感受</label>
-                                <textarea id="acFeeling" placeholder="今天的动森游戏感受..." rows="2"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                    <button class="save-btn" onclick="saveGame()">
-                        <i class="fas fa-save"></i> 暂时保存
-                    </button>
-                </div>
-            </div>
-
-            <!-- 娱乐记录 -->
-            <div class="collapsible-block" id="娱乐记录-block">
-                <div class="block-header" onclick="toggleBlock('娱乐记录')">
-                    <h3><i class="fas fa-film"></i> 娱乐记录</h3>
-                    <button class="block-toggle">
-                        <i class="fas fa-chevron-down"></i>
-                    </button>
-                </div>
-                <div class="block-content" id="娱乐记录-content">
-                    <div class="form-group">
-                        <div class="form-row">
-                            <div class="form-column">
-                                <label for="entertainmentType">娱乐类型</label>
-                                <select id="entertainmentType">
-                                    <option value="电影">电影</option>
-                                    <option value="动画">动画</option>
-                                    <option value="美甲">美甲</option>
-                                    <option value="拼豆">拼豆</option>
-                                    <option value="其他">其他</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-column">
-                                <label for="entertainmentContent">娱乐内容</label>
-                                <textarea id="entertainmentContent" placeholder="例如：看了什么电影/动画，做了什么美甲/拼豆..." rows="2"></textarea>
-                            </div>
-                        </div>
-                        <div class="form-column">
-                            <label for="entertainmentFeeling">娱乐感受</label>
-                            <textarea id="entertainmentFeeling" placeholder="今天的娱乐感受..." rows="2"></textarea>
-                        </div>
-                    </div>
-                    <button class="save-btn" onclick="saveEntertainment()">
-                        <i class="fas fa-save"></i> 暂时保存
-                    </button>
-                </div>
-            </div>
-
-            <!-- 财务记账 -->
-            <div class="collapsible-block" id="财务记账-block">
-                <div class="block-header" onclick="toggleBlock('财务记账')">
-                    <h3><i class="fas fa-money-bill-wave"></i> 财务记账</h3>
-                    <button class="block-toggle">
-                        <i class="fas fa-chevron-down"></i>
-                    </button>
-                </div>
-                <div class="block-content" id="财务记账-content">
-                    <div class="form-group">
-                        <div class="finance-board">
-                            <!-- 收入栏 -->
-                            <div class="finance-column income-column">
-                                <label class="finance-column-title"><i class="fas fa-arrow-down" style="color:#4CAF50;"></i> 收入记录</label>
-                                <div id="incomeItems">
-                                    <div class="finance-item income-item">
-                                        <div class="item-number">1</div>
-                                        <div class="finance-item-content">
-                                            <div class="form-row">
-                                                <div class="form-column">
-                                                    <input type="number" class="finance-amount" placeholder="金额 (元)" min="0" step="0.01">
-                                                </div>
-                                                <div class="form-column">
-                                                    <select class="finance-category">
-                                                        <option value="工资">工资</option>
-                                                        <option value="奖金">奖金</option>
-                                                        <option value="兼职">兼职</option>
-                                                        <option value="投资收益">投资收益</option>
-                                                        <option value="礼金">礼金</option>
-                                                        <option value="其他收入">其他收入</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="form-row">
-                                                <div class="form-column">
-                                                    <select class="finance-payment-method">
-                                                        <option value="">选择支付方式</option>
-                                                        <option value="信用卡">💳 信用卡</option>
-                                                        <option value="储蓄卡">🏦 储蓄卡</option>
-                                                        <option value="支付宝">💰 支付宝</option>
-                                                        <option value="微信">💚 微信</option>
-                                                        <option value="现金">💵 现金</option>
-                                                        <option value="其他">📱 其他</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <input type="text" class="finance-description" placeholder="收入描述...">
-                                            <input type="date" class="finance-date">
-                                            <div class="finance-item-actions">
-                                                <button class="delete-finance-item" onclick="deleteFinanceItem(this, 'income')" title="删除此项">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <button class="add-finance-item" onclick="addFinanceItem('income')">
-                                    <i class="fas fa-plus"></i> 添加收入项
-                                </button>
-                            </div>
-
-                            <!-- 支出栏 -->
-                            <div class="finance-column expense-column">
-                                <label class="finance-column-title"><i class="fas fa-arrow-up" style="color:#F44336;"></i> 支出记录</label>
-                                <div id="expenseItems">
-                                    <div class="finance-item expense-item">
-                                        <div class="item-number">1</div>
-                                        <div class="finance-item-content">
-                                            <div class="form-row">
-                                                <div class="form-column">
-                                                    <input type="number" class="finance-amount" placeholder="金额 (元)" min="0" step="0.01">
-                                                </div>
-                                                <div class="form-column">
-                                                    <select class="finance-category">
-                                                        <option value="正餐">正餐</option>
-                                                        <option value="零食奶茶宵夜">零食奶茶宵夜</option>
-                                                        <option value="日用">日用</option>
-                                                        <option value="服饰">服饰</option>
-                                                        <option value="游戏">游戏</option>
-                                                        <option value="兴趣爱好">兴趣爱好</option>
-                                                        <option value="礼物">礼物</option>
-                                                        <option value="交通">交通</option>
-                                                        <option value="医疗">医疗</option>
-                                                        <option value="其他支出">其他支出</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="form-row">
-                                                <div class="form-column">
-                                                    <select class="finance-payment-method">
-                                                        <option value="">选择支付方式</option>
-                                                        <option value="信用卡">💳 信用卡</option>
-                                                        <option value="储蓄卡">🏦 储蓄卡</option>
-                                                        <option value="支付宝">💰 支付宝</option>
-                                                        <option value="微信">💚 微信</option>
-                                                        <option value="现金">💵 现金</option>
-                                                        <option value="其他">📱 其他</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <input type="text" class="finance-description" placeholder="支出描述...">
-                                            <input type="date" class="finance-date">
-                                            <div class="finance-item-actions">
-                                                <button class="delete-finance-item" onclick="deleteFinanceItem(this, 'expense')" title="删除此项">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <button class="add-finance-item" onclick="addFinanceItem('expense')">
-                                    <i class="fas fa-plus"></i> 添加支出项
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- 今日财务汇总 -->
-                        <div class="finance-summary">
-                            <div class="summary-item">
-                                <span class="summary-label">今日收入</span>
-                                <span class="summary-value income-value" id="todayIncomeTotal">0.00</span>
-                            </div>
-                            <div class="summary-item">
-                                <span class="summary-label">今日支出</span>
-                                <span class="summary-value expense-value" id="todayExpenseTotal">0.00</span>
-                            </div>
-                            <div class="summary-item">
-                                <span class="summary-label">今日结余</span>
-                                <span class="summary-value balance-value" id="todayBalance">0.00</span>
-                            </div>
-                        </div>
-                    </div>
-                    <button class="save-btn" onclick="saveFinance()">
-                        <i class="fas fa-save"></i> 暂时保存
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- 日历板块 -->
-        <div class="section" id="calendarSection">
-            <h2 class="section-title"><i class="fas fa-calendar-alt"></i> 日历视图</h2>
             <div class="calendar-container">
                 <div class="calendar-header">
-                    <div class="calendar-nav">
-                        <button id="prevMonth"><i class="fas fa-chevron-left"></i></button>
-                        <span class="calendar-month" id="calendarMonth">2026年1月</span>
-                        <button id="nextMonth"><i class="fas fa-chevron-right"></i></button>
-                    </div>
-                    <button class="save-btn" onclick="goToToday()">
-                        <i class="fas fa-calendar-day"></i> 返回今日
+                    <button class="btn-icon" id="prev-month">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <h3 id="current-month-year"></h3>
+                    <button class="btn-icon" id="next-month">
+                        <i class="fas fa-chevron-right"></i>
                     </button>
                 </div>
+                
                 <div class="calendar-weekdays">
                     <div>日</div>
                     <div>一</div>
@@ -799,364 +762,343 @@
                     <div>五</div>
                     <div>六</div>
                 </div>
-                <div class="calendar-days" id="calendarDays">
+                
+                <div class="calendar-days" id="calendar-days">
+                    <!-- 日历日期会动态生成 -->
                 </div>
             </div>
-            <div class="important-dates-panel" id="importantDatesPanel">
-                <div class="important-dates-header">
-                    <h3 class="section-title"><i class="fas fa-star"></i> 重要日期标记</h3>
-                    <button class="save-btn" id="toggleAddImportantForm">
+            
+            <div class="important-dates-section">
+                <div class="section-header">
+                    <h3><i class="fas fa-star"></i> 重要日期管理</h3>
+                    <button class="btn btn-small" id="add-important-date">
                         <i class="fas fa-plus"></i> 添加重要日期
                     </button>
                 </div>
-                <div class="important-dates-list" id="importantDatesList">
-                    <p style="text-align: center; color: #999; padding: 20px;">暂无重要日期标记</p>
+                
+                <div class="important-dates-list" id="important-dates-list">
+                    <!-- 重要日期列表会动态生成 -->
                 </div>
-                <div class="add-important-form" id="addImportantForm" style="display: none;">
-                    <h4>添加新重要日期</h4>
-                    <div class="form-group">
-                        <div class="form-row">
-                            <div class="form-column">
-                                <label for="importantDate">日期</label>
-                                <input type="date" id="importantDate" value="">
+                
+                <!-- 添加重要日期表单（默认隐藏） -->
+                <div class="modal" id="date-modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3>添加重要日期</h3>
+                            <button class="btn-icon btn-close-modal">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="important-date-form">
+                                <div class="form-group">
+                                    <label for="date-title">日期标题</label>
+                                    <input type="text" id="date-title" placeholder="如：纪念日、生日等" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="date-date">日期</label>
+                                    <input type="date" id="date-date" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="date-type">类型</label>
+                                    <select id="date-type">
+                                        <option value="纪念日">纪念日</option>
+                                        <option value="生日">生日</option>
+                                        <option value="截止日期">截止日期</option>
+                                        <option value="活动">活动</option>
+                                        <option value="其他">其他</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="date-color">标记颜色</label>
+                                    <div class="color-options">
+                                        <div class="color-option" data-color="#FF6B6B">
+                                            <div class="color-preview" style="background-color: #FF6B6B;"></div>
+                                            <span>红色</span>
+                                        </div>
+                                        <div class="color-option" data-color="#4ECDC4">
+                                            <div class="color-preview" style="background-color: #4ECDC4;"></div>
+                                            <span>青色</span>
+                                        </div>
+                                        <div class="color-option" data-color="#FFD166">
+                                            <div class="color-preview" style="background-color: #FFD166;"></div>
+                                            <span>黄色</span>
+                                        </div>
+                                        <div class="color-option" data-color="#06D6A0">
+                                            <div class="color-preview" style="background-color: #06D6A0;"></div>
+                                            <span>绿色</span>
+                                        </div>
+                                        <div class="color-option" data-color="#118AB2">
+                                            <div class="color-preview" style="background-color: #118AB2;"></div>
+                                            <span>蓝色</span>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" id="date-color" value="#FF6B6B">
+                                </div>
+                                <div class="form-actions">
+                                    <button type="button" class="btn btn-secondary btn-close-modal">取消</button>
+                                    <button type="submit" class="btn btn-primary">保存</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 数据复盘页面 -->
+        <section class="page" id="analytics-page">
+            <div class="page-header">
+                <h2><i class="fas fa-chart-bar"></i> 数据复盘</h2>
+                <p class="page-description">查看统计数据和分析</p>
+            </div>
+            
+            <div class="analytics-container">
+                <div class="analytics-filters">
+                    <div class="filter-group">
+                        <label for="analytics-period">时间范围</label>
+                        <select id="analytics-period">
+                            <option value="week">最近一周</option>
+                            <option value="month">最近一个月</option>
+                            <option value="quarter">最近三个月</option>
+                            <option value="year">最近一年</option>
+                            <option value="all">全部数据</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-small" id="refresh-analytics">
+                        <i class="fas fa-sync-alt"></i> 刷新数据
+                    </button>
+                </div>
+                
+                <div class="analytics-sections">
+                    <!-- 健康方面 -->
+                    <div class="analytics-section">
+                        <h3><i class="fas fa-heartbeat"></i> 健康方面</h3>
+                        <div class="charts-container">
+                            <div class="chart-box">
+                                <h4>睡眠质量趋势</h4>
+                                <div class="chart-placeholder" id="sleep-chart">
+                                    <!-- 图表会通过JS动态生成 -->
+                                    <canvas id="sleep-chart-canvas"></canvas>
+                                </div>
                             </div>
-                            <div class="form-column">
-                                <label for="importantType">类型</label>
-                                <select id="importantType">
-                                    <option value="anniversary">纪念日</option>
-                                    <option value="deadline">截止日期</option>
-                                    <option value="event">重要事件</option>
-                                    <option value="reminder">提醒事项</option>
-                                    <option value="birthday">生日</option>
-                                    <option value="other">其他</option>
-                                </select>
+                            <div class="chart-box">
+                                <h4>运动频率统计</h4>
+                                <div class="chart-placeholder" id="exercise-chart">
+                                    <canvas id="exercise-chart-canvas"></canvas>
+                                </div>
                             </div>
                         </div>
-                        <div class="form-column">
-                            <label for="importantLabel">标签/描述</label>
-                            <input type="text" id="importantLabel" placeholder="例如: 项目截止、生日聚会等">
+                    </div>
+                    
+                    <!-- 学习方面 -->
+                    <div class="analytics-section">
+                        <h3><i class="fas fa-graduation-cap"></i> 学习方面</h3>
+                        <div class="charts-container">
+                            <div class="chart-box">
+                                <h4>学习时长统计</h4>
+                                <div class="chart-placeholder" id="study-chart">
+                                    <canvas id="study-chart-canvas"></canvas>
+                                </div>
+                            </div>
+                            <div class="chart-box">
+                                <h4>科目分布</h4>
+                                <div class="chart-placeholder" id="subject-chart">
+                                    <canvas id="subject-chart-canvas"></canvas>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="form-actions">
-                        <button class="save-btn" onclick="addImportantDate()">
-                            <i class="fas fa-save"></i> 保存
-                        </button>
-                        <button class="cancel-btn" id="cancelAddImportantForm">
-                            取消
-                        </button>
+                    
+                    <!-- 家务方面 -->
+                    <div class="analytics-section">
+                        <h3><i class="fas fa-home"></i> 家务方面</h3>
+                        <div class="charts-container">
+                            <div class="chart-box full-width">
+                                <h4>家务完成情况</h4>
+                                <div class="chart-placeholder" id="chores-chart">
+                                    <canvas id="chores-chart-canvas"></canvas>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="record-block">
-                <h3 class="section-title"><i class="fas fa-calendar-check"></i> 日期详情</h3>
-                <div id="dateDetails">
-                    <p>请点击日历上的日期查看该日的记录详情</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 底部导航 -->
-    <div class="bottom-nav">
-        <div class="bottom-nav-item active" data-section="打卡记录">
-            <div class="bottom-nav-icon"><i class="fas fa-check-circle"></i></div>
-            <div class="bottom-nav-text">打卡</div>
-        </div>
-        <div class="bottom-nav-item" data-section="时间轴记录">
-            <div class="bottom-nav-icon"><i class="fas fa-clock"></i></div>
-            <div class="bottom-nav-text">记录</div>
-        </div>
-        <div class="bottom-nav-item" data-section="calendar">
-            <div class="bottom-nav-icon"><i class="fas fa-calendar-alt"></i></div>
-            <div class="bottom-nav-text">日历</div>
-        </div>
-        <div class="bottom-nav-item" id="bottomReviewToggle">
-            <div class="bottom-nav-icon"><i class="fas fa-chart-bar"></i></div>
-            <div class="bottom-nav-text">复盘</div>
-        </div>
-    </div>
-
-    <!-- 数据复盘面板 -->
-    <div class="review-panel" id="reviewPanel">
-        <div class="review-header">
-            <h2 class="review-title">数据复盘</h2>
-            <button class="close-review" id="closeReview">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-        <div class="review-section">
-            <h3 class="review-section-title"><i class="fas fa-heartbeat"></i> 健康汇总</h3>
-            <div class="review-stats">
-                <div class="stat-card">
-                    <div class="stat-value" id="avgSleepHours">--</div>
-                    <div class="stat-label">平均睡眠时长(小时)</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="exerciseDays">0</div>
-                    <div class="stat-label">本周运动天数</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="supplementRate">0%</div>
-                    <div class="stat-label">补剂打卡率</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="bodycareRate">0%</div>
-                    <div class="stat-label">护理完成率</div>
-                </div>
-            </div>
-        </div>
-        <div class="review-section">
-            <h3 class="review-section-title"><i class="fas fa-graduation-cap"></i> 学习汇总</h3>
-            <div class="review-stats">
-                <div class="stat-card">
-                    <div class="stat-value" id="totalStudyTime">0</div>
-                    <div class="stat-label">总学习时长(分钟)</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="studyDays">0</div>
-                    <div class="stat-label">学习天数</div>
-                </div>
-            </div>
-            <h4>各科目学习时间分布</h4>
-            <ul class="review-list" id="subjectDistribution">
-                <li>暂无学习记录</li>
-            </ul>
-        </div>
-        <div class="review-section">
-            <h3 class="review-section-title"><i class="fas fa-broom"></i> 家务汇总</h3>
-            <div class="review-stats">
-                <div class="stat-card">
-                    <div class="stat-value" id="totalHouseworkPoints">0</div>
-                    <div class="stat-label">总家务积分</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="avgDailyHouseworkPoints">0</div>
-                    <div class="stat-label">平均每日积分</div>
-                </div>
-            </div>
-            <h4>家务类型统计</h4>
-            <ul class="review-list" id="houseworkStats">
-                <li>暂无家务记录</li>
-            </ul>
-        </div>
-        <div class="review-section">
-            <h3 class="review-section-title"><i class="fas fa-money-bill-wave"></i> 财务汇总</h3>
-            <div class="review-stats">
-                <div class="stat-card">
-                    <div class="stat-value" id="monthExpense">0</div>
-                    <div class="stat-label">本月支出(元)</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="avgDailyExpense">0</div>
-                    <div class="stat-label">日均支出(元)</div>
-                </div>
-            </div>
-            <h4>消费分类统计</h4>
-            <ul class="review-list" id="expenseCategories">
-                <li>暂无财务记录</li>
-            </ul>
-        </div>
-        <div class="review-section">
-            <h3 class="review-section-title"><i class="fas fa-gamepad"></i> 娱乐汇总</h3>
-            <h4>娱乐项目频次统计</h4>
-            <ul class="review-list" id="entertainmentStats">
-                <li>暂无娱乐记录</li>
-            </ul>
-        </div>
-    </div>
-
-    <!-- 今日概览面板 -->
-    <div class="overview-panel collapsed" id="overviewPanel">
-        <div class="overview-header" id="overviewToggle">
-            <h3 class="overview-title"><i class="fas fa-tachometer-alt"></i> 今日概览</h3>
-            <button class="overview-toggle">
-                <i class="fas fa-chevron-down"></i>
-            </button>
-        </div>
-        <div class="overview-content">
-            <div class="overview-item">
-                <span class="overview-label">家务积分</span>
-                <span class="overview-value" id="houseworkOverview">0分</span>
-            </div>
-            <div class="overview-item">
-                <span class="overview-label">学习时长</span>
-                <span class="overview-value" id="studyOverview">0分钟</span>
-            </div>
-            <div class="overview-item">
-                <span class="overview-label">运动时长</span>
-                <span class="overview-value" id="exerciseOverview">0分钟</span>
-            </div>
-            <div class="overview-item">
-                <span class="overview-label">今日支出</span>
-                <span class="overview-value" id="expenseOverview">0元</span>
-            </div>
-        </div>
-    </div>
-
-    <!-- 通知 -->
-    <div id="notification" class="notification" style="display: none;">
-        <i class="fas fa-check-circle"></i>
-        <span id="notificationText">记录保存成功！</span>
-    </div>
-
-    <!-- GitHub同步按钮 -->
-    <button class="github-sync-button" onclick="openGitHubSyncPanel()">
-        <i class="fab fa-github"></i>
-    </button>
-
-    <!-- GitHub同步面板 -->
-    <div class="github-sync-panel" id="githubSyncPanel">
-        <div class="sync-header">
-            <h3><i class="fab fa-github"></i> GitHub 云同步</h3>
-            <button class="close-sync" onclick="closeGitHubSyncPanel()">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-        <div class="sync-content">
-            <!-- 未连接状态 -->
-            <div id="syncNotConnected" class="sync-section">
-                <h4><i class="fas fa-cloud-upload-alt"></i> 连接GitHub账号</h4>
-                <p>使用 GitHub Personal Access Token (PAT) 连接，您的 island 数据将安全地备份到 GitHub Gist。</p>
-
-                <div class="sync-features">
-                    <div class="feature-item">
-                        <i class="fas fa-sync-alt"></i>
-                        <span>多设备同步</span>
+                    
+                    <!-- 财务方面 -->
+                    <div class="analytics-section">
+                        <h3><i class="fas fa-wallet"></i> 财务方面</h3>
+                        <div class="charts-container">
+                            <div class="chart-box">
+                                <h4>收入支出统计</h4>
+                                <div class="chart-placeholder" id="finance-chart">
+                                    <canvas id="finance-chart-canvas"></canvas>
+                                </div>
+                            </div>
+                            <div class="chart-box">
+                                <h4>支出分类</h4>
+                                <div class="chart-placeholder" id="expense-chart">
+                                    <canvas id="expense-chart-canvas"></canvas>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="feature-item">
-                        <i class="fas fa-shield-alt"></i>
-                        <span>端到端加密</span>
+                    
+                    <!-- 娱乐方面 -->
+                    <div class="analytics-section">
+                        <h3><i class="fas fa-gamepad"></i> 娱乐方面</h3>
+                        <div class="charts-container">
+                            <div class="chart-box full-width">
+                                <h4>娱乐时长统计</h4>
+                                <div class="chart-placeholder" id="entertainment-chart">
+                                    <canvas id="entertainment-chart-canvas"></canvas>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="feature-item">
-                        <i class="fas fa-history"></i>
-                        <span>版本历史</span>
-                    </div>
-                </div>
-
-                <button class="github-connect-btn" onclick="openPATModal()">
-                    <i class="fab fa-github"></i> 配置 GitHub PAT
-                </button>
-
-                <div class="pat-config-form" id="patConfigForm" style="display: none; margin-top: 20px;">
-                    <h4>配置 GitHub PAT</h4>
-                    <div class="form-group">
-                        <label>Personal Access Token</label>
-                        <input type="password" id="githubPAT" placeholder="ghp_..." style="width:100%;padding:10px;border:1px solid #ddd;border-radius:6px;margin-bottom:10px;">
-                        <small style="color:#666;display:block;margin-bottom:10px;">
-                            <i class="fas fa-info-circle"></i>
-                            在 GitHub → Settings → Developer settings → Personal access tokens 创建
-                        </small>
-                        <label>Gist 描述 (可选)</label>
-                        <input type="text" id="gistDescription" placeholder="island sync data" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:6px;">
-                    </div>
-                    <div class="sync-form-actions">
-                        <button class="sync-save-btn" onclick="connectWithPAT()">
-                            <i class="fas fa-link"></i> 连接
-                        </button>
-                        <button class="sync-cancel-btn" onclick="closePATModal()">
-                            取消
-                        </button>
-                    </div>
-                </div>
-
-                <p class="sync-note">
-                    <i class="fas fa-lock"></i> 数据将加密存储到您的私有 Gist，仅您自己可以访问
-                </p>
-            </div>
-
-            <!-- 已连接状态 -->
-            <div id="syncConnected" class="sync-section" style="display:none;">
-                <h4><i class="fas fa-user-check"></i> 已连接</h4>
-
-                <div class="user-info">
-                    <img id="githubAvatar" src="" alt="头像" class="avatar">
-                    <div>
-                        <strong id="githubUsername">GitHub User</strong>
-                        <div class="user-status">
-                            <i class="fas fa-circle" style="color:#4CAF50;font-size:8px;"></i>
-                            <span>已连接</span>
+                    
+                    <!-- 动森打卡 -->
+                    <div class="analytics-section">
+                        <h3><i class="fas fa-leaf"></i> 动森打卡</h3>
+                        <div class="charts-container">
+                            <div class="chart-box full-width">
+                                <h4>NPC互动完成率</h4>
+                                <div class="chart-placeholder" id="ac-chart">
+                                    <canvas id="ac-chart-canvas"></canvas>
+                                </div>
+                                <div class="data-table" id="ac-table">
+                                    <!-- 表格会动态生成 -->
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-
-                <div class="sync-actions">
-                    <button class="sync-action-btn" onclick="syncToGitHub('upload')">
-                        <i class="fas fa-cloud-upload-alt"></i> 上传到 GitHub
-                    </button>
-                    <button class="sync-action-btn" onclick="syncToGitHub('download')">
-                        <i class="fas fa-cloud-download-alt"></i> 从 GitHub 下载
-                    </button>
-                    <button class="sync-action-btn" onclick="manualSyncConfig()">
-                        <i class="fas fa-cog"></i> 手动同步配置
-                    </button>
-                </div>
-
-                <div class="sync-info">
-                    <div class="info-item">
-                        <span>上次同步</span>
-                        <strong id="lastSyncTime">从未同步</strong>
-                    </div>
-                    <div class="info-item">
-                        <span>同步记录</span>
-                        <strong id="syncRecordCount">0条</strong>
-                    </div>
-                </div>
-
-                <button class="sync-disconnect-btn" onclick="disconnectGitHub()">
-                    <i class="fas fa-sign-out-alt"></i> 断开连接
-                </button>
             </div>
+        </section>
 
-            <!-- 手动同步配置 -->
-            <div id="syncManualConfig" class="sync-section" style="display:none;">
-                <h4><i class="fas fa-cog"></i> 手动同步配置</h4>
-
-                <div class="form-group">
-                    <label>GitHub Username</label>
-                    <input type="text" id="manualUsername" placeholder="输入用户名" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:6px;margin-bottom:10px;">
-
-                    <label>Gist ID (可选)</label>
-                    <input type="text" id="manualGistId" placeholder="自动创建或指定现有Gist" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:6px;margin-bottom:10px;">
-
-                    <small style="color:#666;display:block;margin-bottom:15px;">
-                        留空Gist ID将自动创建新Gist，或指定现有Gist进行同步
-                    </small>
+        <!-- 设置页面 -->
+        <section class="page" id="settings-page">
+            <div class="page-header">
+                <h2><i class="fas fa-cog"></i> 设置与同步</h2>
+                <p class="page-description">管理应用设置和数据同步</p>
+            </div>
+            
+            <div class="settings-container">
+                <div class="settings-section">
+                    <h3><i class="fas fa-cloud-upload-alt"></i> GitHub 云同步</h3>
+                    <div class="settings-group">
+                        <div class="form-group">
+                            <label for="github-token">GitHub Personal Access Token</label>
+                            <input type="password" id="github-token" placeholder="输入您的GitHub Token">
+                            <p class="help-text">
+                                需要具有gist权限的Token。您可以在GitHub设置中生成。
+                                <a href="https://github.com/settings/tokens" target="_blank">生成Token</a>
+                            </p>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="gist-id">Gist ID (可选)</label>
+                            <input type="text" id="gist-id" placeholder="如果已有Gist，请输入ID">
+                            <p class="help-text">如果已有同步的Gist，请输入ID以便更新。否则将创建新的Gist。</p>
+                        </div>
+                        
+                        <div class="button-group">
+                            <button class="btn btn-primary" id="backup-data">
+                                <i class="fas fa-upload"></i> 备份数据到GitHub
+                            </button>
+                            <button class="btn btn-secondary" id="restore-data">
+                                <i class="fas fa-download"></i> 从GitHub恢复数据
+                            </button>
+                        </div>
+                        
+                        <div class="sync-status-display">
+                            <h4>同步状态</h4>
+                            <div class="status-item">
+                                <span>上次同步：</span>
+                                <strong id="last-sync">从未</strong>
+                            </div>
+                            <div class="status-item">
+                                <span>Gist ID：</span>
+                                <strong id="current-gist-id">未设置</strong>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-
-                <div class="sync-form-actions">
-                    <button class="sync-save-btn" onclick="saveManualConfig()">
-                        <i class="fas fa-save"></i> 保存配置
-                    </button>
-                    <button class="sync-cancel-btn" onclick="showConnectedView()">
-                        返回
-                    </button>
+                
+                <div class="settings-section">
+                    <h3><i class="fas fa-database"></i> 数据管理</h3>
+                    <div class="settings-group">
+                        <div class="button-group">
+                            <button class="btn btn-secondary" id="export-data">
+                                <i class="fas fa-file-export"></i> 导出数据 (JSON)
+                            </button>
+                            <button class="btn btn-secondary" id="import-data">
+                                <i class="fas fa-file-import"></i> 导入数据
+                            </button>
+                            <button class="btn btn-danger" id="clear-data">
+                                <i class="fas fa-trash"></i> 清除所有本地数据
+                            </button>
+                        </div>
+                        <div class="storage-info">
+                            <h4>存储信息</h4>
+                            <div class="status-item">
+                                <span>已用存储：</span>
+                                <strong id="storage-used">计算中...</strong>
+                            </div>
+                            <div class="status-item">
+                                <span>归档记录数：</span>
+                                <strong id="archive-count">0</strong> 天
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="settings-section">
+                    <h3><i class="fas fa-info-circle"></i> 关于应用</h3>
+                    <div class="settings-group">
+                        <div class="about-app">
+                            <p><strong>小航小刀小岛 - 个人生活管理PWA应用</strong></p>
+                            <p>版本：1.0.0</p>
+                            <p>技术：纯原生HTML5/CSS3/JavaScript</p>
+                            <p>数据存储：LocalStorage</p>
+                            <p>同步：GitHub Gist API</p>
+                            <p>设计：轻量可爱的马卡龙色系和莫兰迪色系</p>
+                            <p class="app-features">
+                                <i class="fas fa-check"></i> 支持PWA安装到桌面<br>
+                                <i class="fas fa-check"></i> 支持离线使用<br>
+                                <i class="fas fa-check"></i> 响应式设计<br>
+                                <i class="fas fa-check"></i> 数据加密同步
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
+        </section>
+    </main>
 
-            <!-- 同步状态 -->
-            <div id="syncStatus" class="sync-status" style="display:none;">
-                <div class="status-content">
-                    <div class="spinner"></div>
-                    <span id="statusText">正在同步...</span>
-                </div>
-                <div id="syncProgress" style="margin-top:10px;">
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width:0%"></div>
-                    </div>
-                    <div class="progress-text" style="text-align:center;font-size:12px;color:#666;margin-top:5px;">
-                        <span id="progressText">0%</span>
-                    </div>
-                </div>
-            </div>
+    <!-- 保存成功提示 -->
+    <div class="toast" id="save-toast">
+        <div class="toast-content">
+            <i class="fas fa-check-circle"></i>
+            <span>数据保存成功！</span>
         </div>
     </div>
 
-    <div class="sync-overlay" id="syncOverlay" onclick="closeGitHubSyncPanel()"></div>
-
-    <footer>
-        <p>小航小刀小岛 🏝️ 每日23:59自动归档</p>
-    </footer>
+    <!-- 文件导入输入 -->
+    <input type="file" id="import-file" accept=".json" style="display: none;">
 
     <script src="app.js"></script>
+    <script>
+        // 注册Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('service-worker.js')
+                    .then(registration => {
+                        console.log('Service Worker 注册成功:', registration);
+                    })
+                    .catch(error => {
+                        console.log('Service Worker 注册失败:', error);
+                    });
+            });
+        }
+    </script>
 </body>
 </html>
