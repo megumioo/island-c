@@ -1,27 +1,95 @@
 {
   "name": "小航小刀小岛",
   "short_name": "生活管理",
-  "description": "小航和小刀的个人生活管理工具",
-  "start_url": "/",
+  "description": "记录小航和小刀两人日常生活的个人管理工具",
+  "start_url": ".",
   "display": "standalone",
-  "background_color": "#F9F9F9",
-  "theme_color": "#A7C7E7",
-  "orientation": "portrait-primary",
+  "background_color": "#FFFFFF",
+  "theme_color": "#4A90E2",
+  "orientation": "any",
   "icons": [
     {
       "src": "favicon.ico",
-      "sizes": "64x64",
+      "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
     },
     {
       "src": "icon-192.png",
+      "type": "image/png",
       "sizes": "192x192",
-      "type": "image/png"
+      "purpose": "any maskable"
     },
     {
       "src": "icon-512.png",
+      "type": "image/png",
       "sizes": "512x512",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "apple-touch-icon.png",
+      "sizes": "180x180",
       "type": "image/png"
+    }
+  ],
+  "categories": ["lifestyle", "productivity", "personal"],
+  "lang": "zh-CN",
+  "dir": "ltr",
+  "scope": "/",
+  "prefer_related_applications": false,
+  "related_applications": [],
+  "shortcuts": [
+    {
+      "name": "今日记录",
+      "short_name": "记录",
+      "description": "开始今天的记录",
+      "url": "./#records"
+    },
+    {
+      "name": "打卡",
+      "short_name": "打卡",
+      "description": "进行每日打卡",
+      "url": "./#checkin"
+    },
+    {
+      "name": "数据复盘",
+      "short_name": "复盘",
+      "description": "查看数据统计",
+      "url": "./#analytics"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "screenshot-desktop.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "桌面端界面"
+    },
+    {
+      "src": "screenshot-mobile.png",
+      "sizes": "750x1334",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "移动端界面"
+    }
+  ],
+  "display_override": ["window-controls-overlay"],
+  "edge_side_panel": {
+    "preferred_width": 400
+  },
+  "share_target": {
+    "action": "./",
+    "method": "GET",
+    "params": {
+      "title": "分享到小航小刀小岛",
+      "text": "分享内容",
+      "url": "链接"
+    }
+  },
+  "protocol_handlers": [
+    {
+      "protocol": "web+life",
+      "url": "/?type=%s"
     }
   ]
 }
